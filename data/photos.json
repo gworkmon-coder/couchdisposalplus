@@ -1,0 +1,92 @@
+{
+  "loader-couch-removal-inside": {
+    "category": "in_home",
+    "slot": "process",
+    "alt": "Two LoadUp Loaders lifting a green three-seat sofa out of a {city} living room while the customer directs them toward the door",
+    "caption": "In-home pickup: Loaders carry the sofa out from where it stands \u2014 you don't move it to the curb."
+  },
+  "loader-couch-removal-outdoor-4": {
+    "category": "outdoor",
+    "slot": "hero",
+    "alt": "Two LoadUp Loaders carrying a cream three-seat sofa down a {city} driveway toward a pickup truck",
+    "caption": "The carry to the truck is included in the {item} price \u2014 there is no per-flight or long-carry surcharge."
+  },
+  "loader-moving-removing-couch-4": {
+    "category": "in_home",
+    "slot": "process",
+    "alt": "A LoadUp Loader guiding a cream sofa through a {city} living room toward the patio doors",
+    "caption": "Loaders plan the exit route before lifting \u2014 doorways, turns, and stairwells first."
+  },
+  "loader-couch-removal-inside-3": {
+    "category": "customer",
+    "slot": "trust",
+    "alt": "A LoadUp Loader shaking hands with a {city} customer in her living room before the sofa pickup begins",
+    "caption": "Every {city} pickup is handled by background-checked, insured independent Loaders."
+  },
+  "loader-couch-removal-inside-2": {
+    "category": "customer",
+    "slot": "trust",
+    "alt": "Two LoadUp Loaders confirming pickup details with a {city} customer beside a green sofa",
+    "caption": "The price is confirmed online before arrival \u2014 no in-home quote, no on-site upcharge."
+  },
+  "loader-moving-removing-couch-3": {
+    "category": "in_home",
+    "slot": "process",
+    "alt": "A LoadUp Loader positioning a cream sofa near the patio doors of a {city} home",
+    "caption": "Tight turns and narrow doorways are routine \u2014 disassembly is included if the piece won't clear."
+  },
+  "loader-moving-removing-couch-5": {
+    "category": "in_home",
+    "slot": "process",
+    "alt": "Two LoadUp Loaders lifting a cream sofa together inside a {city} living room",
+    "caption": "Two-person carry is standard on every sofa pickup."
+  },
+  "loader-moving-removing-couch-2": {
+    "category": "in_home",
+    "slot": "hero",
+    "alt": "Two LoadUp Loaders carrying a cream three-seat sofa across a {city} living room toward the exit",
+    "caption": "{item} pickup in {city} \u2014 booked online, collected from inside the home."
+  },
+  "loader-couch-removal-outdoor": {
+    "category": "outdoor",
+    "slot": "outcome",
+    "alt": "A cream three-seat sofa loaded onto a LoadUp truck bed outside a {city} home",
+    "caption": "Loaded and gone. Donatable sofas are routed to local charity partners first."
+  },
+  "loader-couch-removal-inside-4": {
+    "category": "in_home",
+    "slot": "hero",
+    "alt": "Two LoadUp Loaders lifting a green sofa in a {city} living room while the customer watches",
+    "caption": "You point at it; the Loaders handle the rest."
+  },
+  "LoadUp_2025_0477": {
+    "category": "customer",
+    "slot": "trust",
+    "alt": "A {city} customer greeting two LoadUp Loaders at her front door at the start of a pickup",
+    "caption": "Loaders arrive inside your chosen 4-hour window."
+  },
+  "LoadUp_2025_0353": {
+    "category": "equipment",
+    "slot": "outcome",
+    "alt": "Two LoadUp Loaders securing the gate on a LoadUp junk removal trailer after a {city} pickup",
+    "caption": "Loads are sorted for donation and recycling before disposal."
+  },
+  "LoadUp_2025_1710": {
+    "category": "team",
+    "slot": "trust",
+    "alt": "Two LoadUp Loaders standing beside a LoadUp junk removal trailer",
+    "caption": "Independent local Loaders \u2014 background-checked, insured, and rated after every job."
+  },
+  "LoadUp_2025_0266": {
+    "category": "equipment",
+    "slot": "outcome",
+    "alt": "A LoadUp Loader closing the gate of a LoadUp junk removal trailer after loading a sofa",
+    "caption": "Everything leaves in one trip."
+  },
+  "LoadUp_2025_0057": {
+    "category": "team",
+    "slot": "outcome",
+    "alt": "A LoadUp Loader in the cab of a LoadUp truck heading to a scheduled {city} pickup",
+    "caption": "Routes are batched locally, which is what keeps {city} pickup windows tight."
+  }
+}

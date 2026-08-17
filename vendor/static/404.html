@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found · Couch Disposal Plus</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.t%7Bfont-family:'Inter Tight',-apple-system,system-ui,sans-serif;font-weight:800;font-size:32px;letter-spacing:-2.2px%7D%3C/style%3E%3Ctext x='4' y='44' class='t' fill='%232db8b3'%3EC%3C/text%3E%3Ctext x='22' y='44' class='t' fill='%230a0a0a'%3EDP%3C/text%3E%3C/svg%3E">
+
+<style>
+  :root {
+    --teal: #4ed3cf; --teal-deep: #2db8b3; --lime: #ccff00;
+    --black: #0a0a0a; --ink: #1a1a1a; --ink-mid: #4a4a4a; --ink-soft: #6a6a6a;
+    --line: #e8e8e8; --bg: #ffffff;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --sans: 'Inter Tight', -apple-system, system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--sans); color: var(--ink); background: var(--bg); line-height: 1.55; min-height: 100vh; display: flex; flex-direction: column; }
+  a { color: inherit; text-decoration: none; }
+  nav.primary { background: #fff; border-bottom: 1px solid var(--line); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; padding: 0 28px; max-width: 1280px; margin: 0 auto; width: 100%; }
+  .cdp-mark { font-family: var(--sans); font-weight: 800; font-size: 24px; letter-spacing: -0.07em; color: var(--black); line-height: 1; }
+  .cdp-mark .c { color: var(--teal-deep); }
+  .nav-back { padding: 11px 22px; background: var(--lime); color: var(--black); font-size: 14px; font-weight: 700; border-radius: 8px; }
+  main { flex: 1; display: flex; align-items: center; padding: 80px 28px; }
+  .wrap { max-width: 720px; margin: 0 auto; text-align: center; }
+  .code { display: inline-block; font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--teal-deep); background: #e6f9f8; padding: 6px 14px; border-radius: 999px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; }
+  h1 { font-family: var(--sans); font-weight: 800; font-size: clamp(48px, 8vw, 96px); line-height: 1; letter-spacing: -0.04em; color: var(--black); margin-bottom: 18px; }
+  h1 em { font-family: var(--mono); font-style: italic; font-weight: 500; color: var(--teal-deep); letter-spacing: -0.04em; font-size: 0.7em; }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--ink-mid); margin-bottom: 36px; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cta-primary { padding: 14px 26px; background: var(--black); color: var(--lime); font-weight: 700; border-radius: 8px; font-size: 15px; box-shadow: 4px 4px 0 0 var(--teal); transition: transform 0.1s, box-shadow 0.2s; }
+  .cta-primary:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 0 var(--teal); }
+  .cta-secondary { padding: 14px 22px; border: 1.5px solid var(--line); color: var(--ink); font-weight: 600; border-radius: 8px; font-size: 15px; transition: border-color 0.15s; }
+  .cta-secondary:hover { border-color: var(--black); }
+  .links { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); text-align: left; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .links h3 { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 14px; text-align: center; }
+  .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .links-grid a { padding: 10px 14px; background: #fafafa; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; color: var(--ink); transition: all 0.15s; display: flex; align-items: center; justify-content: space-between; }
+  .links-grid a:hover { background: var(--black); color: #fff; border-color: var(--black); }
+  .links-grid a::after { content: "→"; font-family: var(--mono); color: var(--ink-soft); }
+  .links-grid a:hover::after { color: var(--lime); }
+  footer { padding: 24px 28px; border-top: 1px solid var(--line); text-align: center; font-size: 12px; color: var(--ink-soft); }
+  footer strong { color: var(--teal-deep); font-weight: 600; }
+  @media (max-width: 480px) { .links-grid { grid-template-columns: 1fr; } .ctas { flex-direction: column; } .cta-primary, .cta-secondary { width: 100%; } }
+</style>
+</head>
+<body>
+<nav class="primary"><div class="nav-inner"><a href="/" aria-label="Couch Disposal Plus — home"><span class="cdp-mark"><span class="c">C</span>DP</span></a><a href="/" class="nav-back">Back to home</a></div></nav>
+<main><div class="wrap">
+<span class="code">404 · Not Found</span>
+<h1>Couch <em>not</em> here.</h1>
+<p class="lede">The page you're looking for doesn't exist on this site — but the couch removal does. Pick what you need below, or head home and start fresh.</p>
+<div class="ctas"><a href="/" class="cta-primary">Back to home</a><a href="/couch-removal/" class="cta-secondary">Book couch pickup</a></div>
+<div class="links"><h3>Or jump to a service</h3>
+<div class="links-grid">
+<a href="/couch-removal/">Couch removal</a>
+<a href="/sectional-removal/">Sectional removal</a>
+<a href="/sleeper-sofa-removal/">Sleeper sofa</a>
+<a href="/recliner-removal/">Recliner</a>
+<a href="/donation-pickup/">Donation pickup</a>
+<a href="/locations/">All cities</a>
+</div></div>
+</div></main>
+<footer>Powered by <strong>LoadUp Technologies</strong> · Couch Disposal Plus, a brand of LoadUp Technologies, LLC</footer>
+</body></html>

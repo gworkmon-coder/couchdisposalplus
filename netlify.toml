@@ -1,0 +1,22 @@
+# Couch Disposal Plus — Netlify build configuration
+
+[build]
+  command = "./build.sh"
+  publish = "dist"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+  PIP_DISABLE_PIP_VERSION_CHECK = "1"
+
+# Hashed/immutable assets: cache hard.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

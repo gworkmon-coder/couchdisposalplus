@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order | Couch Disposal Plus</title>
+<meta name="description" content="Track your couch removal order. Check pickup status, Loader assignment, and ETA.">
+<link rel="canonical" href="https://couchdisposalplus.com/track-order/">
+<meta name="robots" content="noindex, follow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.t%7Bfont-family:'Inter Tight',-apple-system,system-ui,sans-serif;font-weight:800;font-size:32px;letter-spacing:-2.2px%7D%3C/style%3E%3Ctext x='4' y='44' class='t' fill='%232db8b3'%3EC%3C/text%3E%3Ctext x='22' y='44' class='t' fill='%230a0a0a'%3EDP%3C/text%3E%3C/svg%3E">
+
+<style>
+  :root {
+    --teal: #4ed3cf; --teal-deep: #2db8b3; --teal-tint: #e6f9f8;
+    --lime: #ccff00; --lime-shadow: rgba(204,255,0,0.4);
+    --black: #0a0a0a; --ink: #1a1a1a; --ink-mid: #4a4a4a; --ink-soft: #6a6a6a;
+    --line: #e8e8e8; --bg: #ffffff; --bg-soft: #fafafa; --bg-card: #f5f5f5;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --sans: 'Inter Tight', -apple-system, system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--sans); color: var(--ink); background: var(--bg); line-height: 1.55; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
+
+  .announce { background: var(--black); color: #fff; text-align: center; padding: 9px 20px; font-size: 13px; }
+  .announce strong { color: var(--lime); font-weight: 700; }
+
+  nav.primary { background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; padding: 0 28px; max-width: 1280px; margin: 0 auto; }
+  .cdp-mark { font-family: var(--sans); font-weight: 800; font-size: 24px; letter-spacing: -0.07em; color: var(--black); line-height: 1; }
+  .cdp-mark .c { color: var(--teal-deep); }
+  .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--ink-mid); }
+  .nav-links a:hover { color: var(--black); }
+  .nav-actions { display: flex; gap: 12px; }
+  .btn-ghost { padding: 10px 16px; font-size: 14px; font-weight: 600; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; }
+  .btn-cta { padding: 11px 22px; background: var(--lime); color: var(--black); font-size: 14px; font-weight: 700; border-radius: 8px; }
+
+  .breadcrumb { padding: 18px 0 6px; font-size: 13px; color: var(--ink-soft); font-family: var(--mono); }
+  .breadcrumb a { color: var(--ink-mid); }
+  .breadcrumb .sep { margin: 0 8px; opacity: 0.5; }
+  .breadcrumb .current { color: var(--black); font-weight: 600; }
+
+  .track-section { padding: 60px 0 96px; min-height: 60vh; }
+  .track-wrap { max-width: 640px; margin: 0 auto; text-align: center; }
+  .track-tag { display: inline-block; padding: 6px 12px; background: var(--teal-tint); color: var(--teal-deep); font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 999px; margin-bottom: 24px; }
+  .track-section h1 { font-family: var(--sans); font-weight: 800; font-size: clamp(38px, 5vw, 60px); line-height: 1.04; letter-spacing: -0.035em; color: var(--black); margin-bottom: 18px; }
+  .track-section h1 em { font-family: var(--mono); font-style: italic; font-weight: 500; color: var(--teal-deep); letter-spacing: -0.04em; font-size: 0.86em; }
+  .track-section .lede { font-size: 18px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 40px; }
+
+  .track-card { background: #fff; border: 1.5px solid var(--black); border-radius: 16px; padding: 36px 32px; box-shadow: 6px 6px 0 0 var(--black); text-align: left; margin-bottom: 32px; }
+  .track-card h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .track-card p { font-size: 15px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 22px; }
+  .track-options { display: grid; gap: 12px; }
+  .track-opt { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid var(--line); border-radius: 10px; transition: all 0.15s; text-decoration: none; color: var(--ink); }
+  .track-opt:hover { border-color: var(--black); background: var(--bg-soft); }
+  .track-opt .ic-wrap { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--teal-tint); color: var(--teal-deep); display: grid; place-items: center; }
+  .track-opt .ic-wrap svg { width: 18px; height: 18px; }
+  .track-opt .opt-content { flex: 1; }
+  .track-opt .opt-content strong { display: block; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .track-opt .opt-content span { font-size: 13px; color: var(--ink-soft); }
+  .track-opt .arrow { font-family: var(--mono); font-size: 18px; color: var(--ink-soft); }
+
+  .soon-tag { display: inline-block; padding: 4px 8px; background: var(--bg-soft); color: var(--ink-soft); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 4px; margin-top: 24px; }
+
+  footer { background: var(--black); color: rgba(255,255,255,0.7); padding: 64px 0 32px; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+  .footer-tagline { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.5); max-width: 280px; margin-bottom: 20px; }
+  .footer-attribution { font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.45); padding: 14px 0; margin-bottom: 18px; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); max-width: 280px; }
+  .footer-attribution strong { color: var(--teal); font-weight: 600; }
+  .logo.lockup-h { display: inline-flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+  .logo.lockup-h .cdp-mark { color: #fff; font-size: 28px; }
+  .logo.lockup-h .cdp-mark .c { color: var(--teal); }
+  .logo.lockup-h .cdp-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.5); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; }
+  .footer-call { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; font-size: 14px; font-weight: 600; color: #fff; }
+  .footer-call .ic { color: var(--teal); }
+  .footer-col h5 { color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a { font-size: 14px; color: rgba(255,255,255,0.6); }
+  .footer-col ul li a:hover { color: var(--teal); }
+  .footer-bottom { padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 13px; color: rgba(255,255,255,0.4); }
+  .footer-bottom a { margin-left: 14px; color: rgba(255,255,255,0.5); }
+  .footer-bottom a:first-child { margin-left: 0; }
+  .footer-bottom a:hover { color: var(--teal); }
+
+  @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; } .footer-grid .footer-col:last-child { display: none; } }
+  @media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } .footer-grid .footer-col:last-child { display: block; } }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <span><strong>Same-day pickup</strong> available in most cities — book before noon</span>
+</div>
+
+<nav class="primary">
+  <div class="nav-inner">
+    <a href="/" aria-label="Couch Disposal Plus — home"><span class="cdp-mark"><span class="c">C</span>DP</span></a>
+    <ul class="nav-links">
+      <li><a href="/couch-removal/">Removal</a></li>
+      <li><a href="/donation-pickup/">Donation</a></li>
+      <li><a href="/pricing/">Pricing</a></li>
+      <li><a href="/locations/">Locations</a></li>
+      <li><a href="/reviews/">Reviews</a></li>
+      <li><a href="/how-it-works/">How It Works</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/track-order/" class="btn-ghost">Track Order</a>
+      <a href="/book-online/" class="btn-cta">Get My Price</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    <span class="current">Track Order</span>
+  </nav>
+</div>
+
+<section class="track-section">
+  <div class="wrap">
+    <div class="track-wrap">
+      <span class="track-tag">Order tracking</span>
+      <h1>Looking for your <em>pickup status</em>?</h1>
+      <p class="lede">Self-service order tracking is rolling out as part of the new booking platform. In the meantime, here are the fastest ways to check on a pickup.</p>
+
+      <div class="track-card">
+        <h2>Check on your order</h2>
+        <p>Order status, Loader ETA, and pickup confirmation are sent to the email and phone number you used at booking. If you need an update or have a question about a specific order, the team is available by phone or email.</p>
+
+        <div class="track-options">
+          <a href="tel:8443110204" class="track-opt">
+            <div class="ic-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+            <div class="opt-content"><strong>Call customer support</strong><span>(844) 311-0204 · 7 AM-8 PM ET, every day</span></div>
+            <span class="arrow">→</span>
+          </a>
+          <a href="mailto:support@couchdisposalplus.com?subject=Order%20status%20inquiry" class="track-opt">
+            <div class="ic-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div class="opt-content"><strong>Email customer support</strong><span>support@couchdisposalplus.com</span></div>
+            <span class="arrow">→</span>
+          </a>
+          <a href="/contact/" class="track-opt">
+            <div class="ic-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <div class="opt-content"><strong>Other ways to reach us</strong><span>Contact page · all available channels</span></div>
+            <span class="arrow">→</span>
+          </a>
+        </div>
+
+        <span class="soon-tag">Self-service tracking · coming soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="/" class="logo lockup-h" aria-label="Couch Disposal Plus — home">
+          <span class="cdp-mark"><span class="c">C</span>DP</span>
+          <span class="cdp-tag">Couch Disposal Plus</span>
+        </a>
+        <p class="footer-tagline">The easiest way to get rid of an old couch. Nationwide pickup, upfront pricing, and donation routing first.</p>
+        <div class="footer-attribution">
+          Powered by <strong>LoadUp Technologies</strong><br>
+          Alpharetta, GA · Operating since 2014
+        </div>
+        <a href="tel:8443110204" class="footer-call">
+          <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          (844) 311-0204
+        </a>
+      </div>
+      <div class="footer-col"><h5>By Item</h5><ul><li><a href="/couch-removal/">Couch Removal</a></li><li><a href="/sectional-removal/">Sectional Removal</a></li><li><a href="/sleeper-sofa-removal/">Sleeper Sofa</a></li><li><a href="/recliner-removal/">Recliner</a></li></ul></div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="/donation-pickup/">Donation Pickup</a></li><li><a href="/pricing/">Pricing</a></li><li><a href="/how-it-works/">How It Works</a></li><li><a href="/locations/">Service Areas</a></li></ul></div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="/about/">About</a></li><li><a href="/reviews/">Reviews</a></li><li><a href="/contact/">Contact</a></li><li><a href="/blog/">Blog</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Couch Disposal Plus, a brand of LoadUp Technologies, LLC. All rights reserved.</span>
+      <span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/sitemap/">Sitemap</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

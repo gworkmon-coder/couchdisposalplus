@@ -1,0 +1,22 @@
+<script>
+  // FAQ accordion — only interactive piece remaining on the marketing page.
+  // The booking flow is handled by the Workmon embed (or by following the
+  // CTA link in the embed-fallback block).
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      document.querySelectorAll('.faq-q').forEach(q => q.setAttribute('aria-expanded', 'false'));
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>
+
+<!-- Workmon embed loader -->
+<script type="module" src="https://workmon.ai/embed.js"></script>
+
+</body>

@@ -1,0 +1,20 @@
+# generated output — Netlify builds this, never commit it
+dist/
+
+# generated data (rebuilt from vendor/ on every build)
+data/cities.csv
+data/universe.csv
+data/photo_manifest.json
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os
+.DS_Store
+Thumbs.db
+
+# netlify
+.netlify/
