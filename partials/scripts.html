@@ -16,6 +16,30 @@
   });
 </script>
 
+<script>
+  // Live price hydration from the booking engine.
+  // Inert until CDP_PRICING_URL is set (one line, site-wide, when the endpoint
+  // exists). Expected response: {"couch": 95, "sectional": 160, ...} for the
+  // requested state+city. Static build-time prices remain the fallback and
+  // the SEO-visible truth.
+  (function () {
+    var url = window.CDP_PRICING_URL;
+    var els = document.querySelectorAll('[data-cdp-price]');
+    if (!url || !els.length) return;
+    var d = els[0].dataset;
+    fetch(url + '?state=' + encodeURIComponent(d.state) + '&city=' + encodeURIComponent(d.city))
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (p) {
+        if (!p) return;
+        els.forEach(function (el) {
+          var v = p[el.dataset.item];
+          if (v) { var em = el.querySelector('em'); (em || el).textContent = v; }
+        });
+      })
+      .catch(function () {});
+  })();
+</script>
+
 <!-- Workmon slideout launcher: every [data-workmon-open] button opens it -->
 <div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>
 <script src="https://workmon.ai/embed.js" async></script>

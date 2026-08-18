@@ -181,7 +181,7 @@ def build(city, state_name, state_cities, nearby):
 # --------------------------------------------------------------------------
 # conditional FAQ selection
 # --------------------------------------------------------------------------
-def faq_set(city, item, cname, sname, state_cities, brand, parent):
+def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
     """Pick 6 questions from a conditional pool so the FAQ block itself varies."""
     pop = city["population"]
     ranked = sorted(state_cities, key=lambda c: -c["population"])
@@ -192,7 +192,7 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent):
 
     q = [
         (f"How much does {item['h1_noun']} cost in {cname}?",
-         item["faq_cost"].replace("{city}", cname).replace("{price}", str(item["price"]))),
+         item["faq_cost"].replace("{city}", cname).replace("{price}", str(price or item["price"]))),
         (f"How fast can you collect my {label} in {cname}?",
          f"Same-day pickup is available across {cname} for bookings placed before noon. Next-day is "
          f"the default. Average booking-to-pickup time in {cname} is about 24 hours."),

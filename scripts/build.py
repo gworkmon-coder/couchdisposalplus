@@ -33,7 +33,9 @@ CONFIG = {
     "phone_display": "(844) 311-0204",
     "phone_e164": "+1-844-311-0204",
     "phone_href": "8443110204",
-    "rating": "4.7",
+    "rating": "4.8",
+    "reviews_display": "340K+",
+    "reviews_count": 340000,
     "nearby_count": 10,       # city tiles per page
     "sitemap_shard": 45000,
 }
@@ -129,6 +131,29 @@ def covered(city, item):
 # photography
 # --------------------------------------------------------------------------
 PHOTOS = {}
+PRICING = {}          # (state, city_slug, item_key) -> int price
+
+
+def load_pricing():
+    """Optional per-city price overrides exported from the booking engine.
+    data/pricing.csv columns: state_code,city_slug,item,price
+    Missing file or missing rows fall back to the national defaults in
+    items.json, so partial exports are fine."""
+    global PRICING
+    path = os.path.join(DATA, "pricing.csv")
+    if not os.path.exists(path):
+        return
+    for r in csv.DictReader(open(path)):
+        try:
+            PRICING[(r["state_code"].strip().lower(),
+                     r["city_slug"].strip().lower(),
+                     r["item"].strip().lower())] = int(float(r["price"]))
+        except (KeyError, ValueError):
+            continue
+
+
+def price_for(st, slug, item_key, items):
+    return PRICING.get((st, slug, item_key), items[item_key]["price"])
 
 
 def load_photos():
@@ -240,7 +265,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     st, slug = city["state_code"], city["city_slug"]
     cname, sname = city["city_name"], states[st]
     url = f"{d}/{st}/{slug}/{item['slug']}/"
-    price = item["price"]
+    price = price_for(st, slug, item_key, items)
 
     ctx = dict(city=cname, state=sname, price=price, state_code=st.upper())
 
@@ -260,11 +285,12 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
                 if k != item_key and covered(city, v)]
     sib_cards = []
     for k, v in siblings[:4]:
+        v_price = price_for(st, slug, k, items)
         sib_cards.append(f'''      <article class="price-card">
         <div class="price-card-header"><svg class="price-card-icon" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">{v["icon"]}</svg><span class="price-badge">{v["badge"]}</span></div>
         <h3>{escape(v["label"])}</h3>
         <p class="desc">{v["desc_card"]}</p>
-        <span class="price">$<em>{v["price"]}</em></span>
+        <span class="price" data-cdp-price data-state="{st}" data-city="{slug}" data-item="{k}">$<em>{v_price}</em></span>
         <span class="price-note">{escape(cname)} starting price</span>
         <a href="/{st}/{slug}/{v["slug"]}/" class="book">View {escape(cname)} {escape(v["label"])} &rarr;</a>
       </article>''')
@@ -332,11 +358,11 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     # ---- schema -----------------------------------------------------------
     offers = ",\n      ".join(
         f'{{ "@type": "Offer", "itemOffered": {{ "@type": "Service", "name": "{v["label"]} Removal {cname}" }}, '
-        f'"price": "{v["price"]}", "priceCurrency": "USD" }}'
-        for v in [item] + [v for _, v in siblings[:3]])
+        f'"price": "{price_for(st, slug, k, items)}", "priceCurrency": "USD" }}'
+        for k, v in [(item_key, item)] + siblings[:3])
 
     faqs = localcontent.faq_set(city, item, cname, sname, STATE_INDEX[st],
-                                cfg["brand"], cfg["parent"])
+                                cfg["brand"], cfg["parent"], price=price)
     faq_schema = ",\n    ".join(
         '{ "@type": "Question", "name": %s, "acceptedAnswer": { "@type": "Answer", "text": %s } }'
         % (json.dumps(q), json.dumps(a)) for q, a in faqs)
@@ -385,7 +411,8 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   "name": "{cfg['brand']}",
   "url": "{d}/",
   "telephone": "{cfg['phone_e164']}",
-  "parentOrganization": {{ "@type": "Organization", "name": "{cfg['parent']}", "url": "https://goloadup.com" }}
+  "parentOrganization": {{ "@type": "Organization", "name": "{cfg['parent']}", "url": "https://goloadup.com" }},
+  "aggregateRating": {{ "@type": "AggregateRating", "ratingValue": "{cfg['rating']}", "reviewCount": "{cfg['reviews_count']}", "bestRating": "5" }}
 }}
 </script>
 
@@ -406,7 +433,6 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   "openingHoursSpecification": [
     {{ "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "opens": "07:00", "closes": "20:00" }}
   ],
-  "aggregateRating": {{ "@type": "AggregateRating", "ratingValue": "{cfg['rating']}", "reviewCount": "{max(120, city['population'] // 400)}", "bestRating": "5" }},
   "hasOfferCatalog": {{
     "@type": "OfferCatalog",
     "name": "{cname} Furniture Removal Services",
@@ -533,7 +559,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
       <div class="local-stats">
         <div class="stat"><span class="stat-num"><em>24h</em></span><span class="stat-label">Avg. Pickup Time</span></div>
         <div class="stat"><span class="stat-num"><em>${price}</em></span><span class="stat-label">Starting Price</span></div>
-        <div class="stat"><span class="stat-num"><em>{max(120, city['population'] // 400)}+</em></span><span class="stat-label">{escape(sname)} Reviews</span></div>
+        <div class="stat"><span class="stat-num"><em>{cfg['reviews_display']}</em></span><span class="stat-label">Verified Reviews</span></div>
         <div class="stat"><span class="stat-num"><em>&#9733; {cfg['rating']}</em></span><span class="stat-label">Avg. Rating</span></div>
       </div>
     </div>
@@ -597,7 +623,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
         <div class="price-card-header"><svg class="price-card-icon" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">{item['icon']}</svg><span class="price-badge">{item['badge']}</span></div>
         <h3>{escape(item['label'])}</h3>
         <p class="desc">{item['desc_card']}</p>
-        <span class="price">$<em>{price}</em></span>
+        <span class="price" data-cdp-price data-state="{st}" data-city="{slug}" data-item="{item_key}">$<em>{price}</em></span>
         <span class="price-note">{escape(cname)} starting price</span>
         <button data-workmon-open class="book">Get Instant Price &rarr;</button>
       </article>
@@ -997,6 +1023,9 @@ def main():
         for v in items.values())
 
     load_photos()
+    load_pricing()
+    if PRICING:
+        print(f"pricing overrides  : {len(PRICING):,} city/item rows")
 
     # single cached stylesheet instead of ~40KB inlined on every page
     css = load_partial("style.html")
