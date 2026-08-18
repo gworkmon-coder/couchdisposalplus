@@ -526,6 +526,8 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
       <h1>{escape(cname)} {escape(item['h1_noun'])}, <em>handled fast</em>.</h1>
       <p class="hero-sub">{hero_sub}</p>
 
+      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
+
       <div class="local-stats">
         <div class="stat"><span class="stat-num"><em>24h</em></span><span class="stat-label">Avg. Pickup Time</span></div>
         <div class="stat"><span class="stat-num"><em>${price}</em></span><span class="stat-label">Starting Price</span></div>
@@ -535,10 +537,6 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     </div>
 
 {photo_hero}
-    <!-- Workmon lead gate. Gates AI-powered booking from bots. -->
-    <div class="quote-card" id="workmon-gate">
-      <div data-workmon-gate data-tenant="loadup" data-brand="couchdisposalplus"></div>
-    </div>
   </div>
 </section>
 
@@ -599,7 +597,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
         <p class="desc">{item['desc_card']}</p>
         <span class="price">$<em>{price}</em></span>
         <span class="price-note">{escape(cname)} starting price</span>
-        <a href="/book-online/?item={item_key}&amp;city={slug}" class="book">Book {escape(cname)} Pickup &rarr;</a>
+        <button data-workmon-open class="book">Get Instant Price &rarr;</button>
       </article>
 
 {sib_html}
@@ -660,7 +658,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   <div class="wrap cta-inner">
     <h2>{escape(cname)}. {escape(item['label'])} <em>out</em>. Done.</h2>
     <p>Pick your item, confirm your ZIP, and a Loader handles the rest.</p>
-    <a href="/book-online/?item={item_key}&amp;city={slug}" class="cta-btn">Book {escape(cname)} Pickup &rarr;</a>
+    <button data-workmon-open class="cta-btn">Get My {escape(cname)} Price &rarr;</button>
     <span class="cta-or">or call <a href="tel:{cfg['phone_href']}" style="color:var(--black);font-weight:700;text-decoration:underline;">{cfg['phone_display']}</a></span>
   </div>
 </section>
@@ -938,18 +936,38 @@ def main():
     # carry over hand-built core pages from the existing deploy
     CORE = ["about", "blog", "book-online", "contact", "donation-pickup", "how-it-works",
             "pricing", "privacy", "reviews", "sitemap", "terms", "track-order"]
+    WORKMON_SNIPPET = (
+        "\n<!-- Workmon slideout launcher -->\n"
+        '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>\n'
+        '<script src="https://workmon.ai/embed.js" async></script>\n\n'
+        "<!-- Workmon initiate-SMS widget -->\n"
+        '<script src="https://workmon.ai/embed/textus.js" data-brand="loadup" async></script>\n'
+        "</body>")
+
+    def copy_static(src, dst):
+        """Copy a hand-built page, retrofitting the slideout + SMS widget.
+        Pages that already carry a launcher (homepage, book-online) pass
+        through untouched so their hand-placed embeds stay authoritative."""
+        html = open(src, encoding="utf-8").read()
+        if "data-workmon-launcher" not in html and "embed/textus.js" not in html:
+            html = html.replace(
+                '<script type="module" src="https://workmon.ai/embed.js"></script>', "")
+            html = html.replace("</body>", WORKMON_SNIPPET, 1)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        with open(dst, "w", encoding="utf-8") as f:
+            f.write(html)
+
     n_static = 0
     if os.path.isdir(args.static_from):
         for name in CORE:
             src = os.path.join(args.static_from, name, "index.html")
             if os.path.isfile(src):
-                os.makedirs(os.path.join(out, name), exist_ok=True)
-                shutil.copy2(src, os.path.join(out, name, "index.html"))
+                copy_static(src, os.path.join(out, name, "index.html"))
                 n_static += 1
         for f in ("index.html", "404.html"):
             src = os.path.join(args.static_from, f)
             if os.path.isfile(src):
-                shutil.copy2(src, os.path.join(out, f))
+                copy_static(src, os.path.join(out, f))
                 n_static += 1
 
     # process photography into dist/assets/img before loading the manifest

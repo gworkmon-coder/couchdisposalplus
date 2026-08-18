@@ -213,4 +213,15 @@
   .hero .photo{margin:24px 0 0;max-width:100%}
   .hero .photo figcaption{color:inherit;opacity:.85}
   @media (max-width:780px){.photo{margin:22px 0}.photo img{border-radius:9px}}
+
+  /* CTA buttons (slideout triggers) */
+  button.btn-cta, button.cta-btn, button.book { font: inherit; cursor: pointer; border: 0; }
+  button.book { width: 100%; }
+  .btn-price { display: inline-block; background: var(--lime); color: var(--black);
+    border: 1.5px solid var(--black); box-shadow: 4px 4px 0 0 var(--black);
+    font-family: inherit; font-weight: 800; font-size: 17px; letter-spacing: -0.01em;
+    padding: 15px 30px; border-radius: 10px; cursor: pointer; margin-bottom: 8px;
+    transition: transform .12s, box-shadow .12s; }
+  .btn-price:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--black); }
+  .btn-price:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 0 var(--black); }
 </style>

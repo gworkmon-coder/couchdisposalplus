@@ -255,7 +255,21 @@
 </footer>
 
 <!-- Workmon embed loader -->
-<script type="module" src="https://workmon.ai/embed.js"></script>
+<script src="https://workmon.ai/embed.js" async></script>
+
+<!-- Workmon initiate-SMS widget.
+     Suppressed on mobile: on a phone the booking flow owns the viewport, and
+     the SMS bubble overlaps the payment step. Loader-gated rather than
+     CSS-hidden so mobile users don't download the script at all. -->
+<script>
+  if (window.matchMedia('(min-width: 781px)').matches) {
+    var t = document.createElement('script');
+    t.src = 'https://workmon.ai/embed/textus.js';
+    t.setAttribute('data-brand', 'loadup');
+    t.async = true;
+    document.body.appendChild(t);
+  }
+</script>
 
 </body>
 </html>

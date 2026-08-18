@@ -331,6 +331,18 @@
   @media (max-width: 480px) {
     .cities-grid { grid-template-columns: 1fr; }
   }
+
+  .hero-photo { margin: 0; }
+  .hero-photo img { width: 100%; height: auto; display: block; border-radius: 16px;
+    border: 1.5px solid var(--black); box-shadow: 8px 8px 0 0 var(--black);
+    aspect-ratio: 3/2; object-fit: cover; background: #eef1f0; }
+  .btn-price { display: inline-block; background: var(--lime); color: var(--black);
+    border: 1.5px solid var(--black); box-shadow: 4px 4px 0 0 var(--black);
+    font-family: var(--sans); font-weight: 800; font-size: 17px; letter-spacing: -0.01em;
+    padding: 15px 30px; border-radius: 10px; cursor: pointer;
+    transition: transform .12s, box-shadow .12s; }
+  .btn-price:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--black); }
+  .btn-price:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 0 var(--black); }
 </style>
 </head>
 <body>
@@ -367,6 +379,8 @@
       <h1>Old couch <em>out</em>.<br>Done in a day.</h1>
       <p class="hero-sub">The easiest way to get rid of an old couch. <strong>Upfront pricing online, same-day pickup, and donation routing first</strong> — handled by independent local Loaders across the country.</p>
 
+      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
+
       <div class="hero-stats">
         <div class="stat">
           <span class="stat-num">$90<em>+</em></span>
@@ -387,10 +401,18 @@
       </div>
     </div>
 
-    <!-- Workmon lead gate. Gates AI-powered booking from bots. -->
-    <div class="quote-card" id="workmon-gate">
-      <div data-workmon-gate data-tenant="loadup" data-brand="couchdisposalplus"></div>
-    </div>
+    <figure class="hero-photo">
+      <picture>
+        <source type="image/webp"
+                srcset="/assets/img/loader-couch-removal-outdoor-4-480.webp 480w, /assets/img/loader-couch-removal-outdoor-4-768.webp 768w, /assets/img/loader-couch-removal-outdoor-4-1024.webp 1024w"
+                sizes="(max-width: 900px) 100vw, 46vw">
+        <img src="/assets/img/loader-couch-removal-outdoor-4-1024.jpg"
+             srcset="/assets/img/loader-couch-removal-outdoor-4-480.jpg 480w, /assets/img/loader-couch-removal-outdoor-4-768.jpg 768w, /assets/img/loader-couch-removal-outdoor-4-1024.jpg 1024w"
+             sizes="(max-width: 900px) 100vw, 46vw"
+             width="1024" height="681" loading="eager" fetchpriority="high" decoding="async"
+             alt="Two LoadUp Loaders carrying a three-seat sofa down a driveway to the pickup truck">
+      </picture>
+    </figure>
   </div>
 </section>
 
@@ -747,8 +769,12 @@
   });
 </script>
 
-<!-- Workmon embed loader -->
-<script type="module" src="https://workmon.ai/embed.js"></script>
+<!-- Workmon slideout launcher -->
+<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>
+<script src="https://workmon.ai/embed.js" async></script>
+
+<!-- Workmon initiate-SMS widget -->
+<script src="https://workmon.ai/embed/textus.js" data-brand="loadup" async></script>
 
 </body>
 </html>
