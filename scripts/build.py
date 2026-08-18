@@ -554,8 +554,6 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
       <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
 
-      <div class="trust-strip" data-workmon-trust="loadup" data-variant="standard"></div>
-
       <div class="local-stats">
         <div class="stat"><span class="stat-num"><em>24h</em></span><span class="stat-label">Avg. Pickup Time</span></div>
         <div class="stat"><span class="stat-num"><em>${price}</em></span><span class="stat-label">Starting Price</span></div>
@@ -754,7 +752,6 @@ def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb,
 {hero_media}
     <h1>{h1_icon}{escape(h1)}</h1>
     <p class="hero-sub">{escape(intro)}</p>
-    <div class="trust-strip" data-workmon-trust="loadup" data-variant="standard"></div>
   </div>
 </section>
 <section class="section cities-section">
@@ -968,11 +965,10 @@ def main():
     CORE = ["about", "blog", "book-online", "contact", "donation-pickup", "how-it-works",
             "pricing", "privacy", "reviews", "sitemap", "terms", "track-order"]
     WORKMON_SNIPPET = (
+        '<script>\n  // Workmon drawer guard. Their embed can stack a new drawer on each CTA\n  // click, which is why closing took several X clicks. Two defenses:\n  //  1. capture-phase click guard: if a drawer is already open, swallow the\n  //     duplicate open so a second/third instance never stacks\n  //  2. Escape key force-closes any drawer and restores page scroll\n  // This is a shim; the underlying stacking is Workmon\'s to fix.\n  (function () {\n    document.addEventListener(\'click\', function (e) {\n      var btn = e.target && e.target.closest && e.target.closest(\'[data-workmon-open]\');\n      if (!btn) return;\n      if (document.querySelector(\'[data-workmon-modal]\')) {\n        e.preventDefault();\n        e.stopImmediatePropagation();\n      }\n    }, true);\n    document.addEventListener(\'keydown\', function (e) {\n      if (e.key !== \'Escape\') return;\n      var els = document.querySelectorAll(\'[data-workmon-modal]\');\n      if (!els.length) return;\n      for (var i = 0; i < els.length; i++) {\n        els[i].parentNode && els[i].parentNode.removeChild(els[i]);\n      }\n      document.documentElement.style.overflow = \'\';\n      document.body.style.overflow = \'\';\n    });\n  })();\n</script>\n'
         "\n<!-- Workmon slideout launcher -->\n"
         '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>\n'
         '<script type="module" src="https://workmon.ai/embed.js" async></script>\n\n'
-        "<!-- Workmon trust badge loader -->\n"
-        '<script src="https://workmon.ai/embed/trust.js" async></script>\n\n'
         "<!-- Workmon initiate-SMS widget -->\n"
         '<script src="https://workmon.ai/embed/textus.js" data-brand="loadup" async></script>\n'
         "</body>")
@@ -982,15 +978,6 @@ def main():
         Pages that already carry a launcher (homepage, book-online) pass
         through untouched so their hand-placed embeds stay authoritative."""
         html = open(src, encoding="utf-8").read()
-        # trust badge above the fold on every page
-        if "data-workmon-trust" not in html:
-            strip = '\n<div class="trust-strip" data-workmon-trust="loadup" data-variant="standard" style="max-width:1200px;margin:10px auto 0;padding:0 24px"></div>\n'
-            i = html.find("</nav>")
-            if i != -1:
-                html = html[:i + 6] + strip + html[i + 6:]
-        if "embed/trust.js" not in html:
-            html = html.replace("</body>",
-                '<script src="https://workmon.ai/embed/trust.js" async></script>\n</body>', 1)
         if "data-workmon-launcher" not in html and "embed/textus.js" not in html:
             html = html.replace(
                 '<script type="module" src="https://workmon.ai/embed.js"></script>', "")

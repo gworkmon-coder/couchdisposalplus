@@ -381,8 +381,6 @@
 
       <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
 
-      <div class="trust-strip" data-workmon-trust="loadup" data-variant="standard" style="margin:16px 0 0;min-height:34px"></div>
-
       <div class="hero-stats">
         <div class="stat">
           <span class="stat-num">$90<em>+</em></span>
@@ -773,9 +771,36 @@
 
 <!-- Workmon slideout launcher -->
 <div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>
+<script>
+  // Workmon drawer guard. Their embed can stack a new drawer on each CTA
+  // click, which is why closing took several X clicks. Two defenses:
+  //  1. capture-phase click guard: if a drawer is already open, swallow the
+  //     duplicate open so a second/third instance never stacks
+  //  2. Escape key force-closes any drawer and restores page scroll
+  // This is a shim; the underlying stacking is Workmon's to fix.
+  (function () {
+    document.addEventListener('click', function (e) {
+      var btn = e.target && e.target.closest && e.target.closest('[data-workmon-open]');
+      if (!btn) return;
+      if (document.querySelector('[data-workmon-modal]')) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    }, true);
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var els = document.querySelectorAll('[data-workmon-modal]');
+      if (!els.length) return;
+      for (var i = 0; i < els.length; i++) {
+        els[i].parentNode && els[i].parentNode.removeChild(els[i]);
+      }
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    });
+  })();
+</script>
 <script type="module" src="https://workmon.ai/embed.js" async></script>
 
-<script src="https://workmon.ai/embed/trust.js" async></script>
 <!-- Workmon initiate-SMS widget -->
 <script src="https://workmon.ai/embed/textus.js" data-brand="loadup" async></script>
 
