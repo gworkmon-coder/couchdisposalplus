@@ -528,6 +528,8 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
       <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
 
+      <div class="trust-strip" data-workmon-trust="loadup" data-variant="standard"></div>
+
       <div class="local-stats">
         <div class="stat"><span class="stat-num"><em>24h</em></span><span class="stat-label">Avg. Pickup Time</span></div>
         <div class="stat"><span class="stat-num"><em>${price}</em></span><span class="stat-label">Starting Price</span></div>
@@ -673,7 +675,8 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 ITEM_NAV = ""
 
 
-def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb):
+def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb,
+               hero_media="", h1_icon=""):
     """Generic index page: groups = [(heading, [(label, href), ...]), ...]"""
     d = cfg["domain"]
     nav = load_partial("nav.html").replace("{{CITY_SLUG}}", "")
@@ -722,8 +725,10 @@ def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb):
 {nav}
 <section class="hero">
   <div class="wrap">
-    <h1>{escape(h1)}</h1>
+{hero_media}
+    <h1>{h1_icon}{escape(h1)}</h1>
     <p class="hero-sub">{escape(intro)}</p>
+    <div class="trust-strip" data-workmon-trust="loadup" data-variant="standard"></div>
   </div>
 </section>
 <section class="section cities-section">
@@ -940,6 +945,8 @@ def main():
         "\n<!-- Workmon slideout launcher -->\n"
         '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>\n'
         '<script src="https://workmon.ai/embed.js" async></script>\n\n'
+        "<!-- Workmon trust badge loader -->\n"
+        '<script src="https://workmon.ai/embed/trust.js" async></script>\n\n'
         "<!-- Workmon initiate-SMS widget -->\n"
         '<script src="https://workmon.ai/embed/textus.js" data-brand="loadup" async></script>\n'
         "</body>")
@@ -949,6 +956,15 @@ def main():
         Pages that already carry a launcher (homepage, book-online) pass
         through untouched so their hand-placed embeds stay authoritative."""
         html = open(src, encoding="utf-8").read()
+        # trust badge above the fold on every page
+        if "data-workmon-trust" not in html:
+            strip = '\n<div class="trust-strip" data-workmon-trust="loadup" data-variant="standard" style="max-width:1200px;margin:10px auto 0;padding:0 24px"></div>\n'
+            i = html.find("</nav>")
+            if i != -1:
+                html = html[:i + 6] + strip + html[i + 6:]
+        if "embed/trust.js" not in html:
+            html = html.replace("</body>",
+                '<script src="https://workmon.ai/embed/trust.js" async></script>\n</body>', 1)
         if "data-workmon-launcher" not in html and "embed/textus.js" not in html:
             html = html.replace(
                 '<script type="module" src="https://workmon.ai/embed.js"></script>', "")
@@ -1050,13 +1066,33 @@ def main():
     # ---- national locations index ---------------------------------------
     groups = [("Browse by state",
                [(states[st], f"/{st}/") for st in sorted(by_state, key=lambda s: states[s])])]
+    PIN = ('<svg class="h1-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+           'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+           '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"/>'
+           '<circle cx="12" cy="10" r="3"/></svg> ')
+    loc_hero = ""
+    if PHOTOS and "loader-couch-removal-outdoor" in PHOTOS:
+        hp = PHOTOS["loader-couch-removal-outdoor"]
+        webp = ", ".join(f"/assets/img/loader-couch-removal-outdoor-{w}.webp {w}w" for w in hp["widths"])
+        jpg = ", ".join(f"/assets/img/loader-couch-removal-outdoor-{w}.jpg {w}w" for w in hp["widths"])
+        loc_hero = f'''    <figure class="hub-hero-photo">
+      <picture>
+        <source type="image/webp" srcset="{webp}" sizes="(max-width: 900px) 100vw, 900px">
+        <img src="/assets/img/loader-couch-removal-outdoor-{hp['widths'][-1]}.jpg" srcset="{jpg}"
+             sizes="(max-width: 900px) 100vw, 900px" width="{hp['width']}" height="{hp['height']}"
+             loading="eager" fetchpriority="high" decoding="async"
+             alt="A sofa loaded on a LoadUp truck outside a customer's home, ready for donation routing">
+      </picture>
+    </figure>
+'''
     write(os.path.join(out, "locations", "index.html"),
           render_hub(f"All Locations | 50 States | {cfg['brand']}",
                      "Couch removal in all 50 states",
                      f"{len(cities):,} cities across {len(by_state)} states. "
                      "Upfront online pricing everywhere we operate.",
                      groups, cfg, "/locations/",
-                     [("Home", "/"), ("Locations", "/locations/")]))
+                     [("Home", "/"), ("Locations", "/locations/")],
+                     hero_media=loc_hero, h1_icon=PIN))
     urls.append(("/locations/", "0.9"))
 
     # ---- redirects + sitemaps + robots ----------------------------------
