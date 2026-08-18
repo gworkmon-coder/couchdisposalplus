@@ -970,7 +970,7 @@ def main():
     WORKMON_SNIPPET = (
         "\n<!-- Workmon slideout launcher -->\n"
         '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>\n'
-        '<script src="https://workmon.ai/embed.js" async></script>\n\n'
+        '<script type="module" src="https://workmon.ai/embed.js" async></script>\n\n'
         "<!-- Workmon trust badge loader -->\n"
         '<script src="https://workmon.ai/embed/trust.js" async></script>\n\n'
         "<!-- Workmon initiate-SMS widget -->\n"
