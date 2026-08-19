@@ -17,6 +17,7 @@ Config lives in CONFIG below. Coverage per item is set in data/items.json
 Usage:  python3 scripts/build.py [--limit-states co,tx] [--out dist]
 """
 import argparse, csv, hashlib, json, math, os, re, shutil, sys, collections
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import localcontent
 import make_blog
 from html import escape
