@@ -986,6 +986,16 @@ def main():
             html = html.replace(
                 '<script type="module" src="https://workmon.ai/embed.js"></script>', "")
             html = html.replace("</body>", WORKMON_SNIPPET, 1)
+        if "NAVPLACEHOLDER" in html:
+            html = (html
+                    .replace("NAVPLACEHOLDER", load_partial("nav.html").replace("{{CITY_SLUG}}", ""))
+                    .replace("FOOTERPLACEHOLDER",
+                             load_partial("footer.html")
+                             .replace("{{CITY_NAME}}", "Nationwide")
+                             .replace("{{FOOTER_CITY_LINKS}}",
+                                      '          <li><a href="/locations/">Browse all cities</a></li>'))
+                    .replace("SCRIPTSPLACEHOLDER", load_partial("scripts.html")))
+        html = html.replace('href="/assets/site.css"', f'href="{CSS_HREF}"')
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         with open(dst, "w", encoding="utf-8") as f:
             f.write(html)
@@ -997,6 +1007,17 @@ def main():
             if os.path.isfile(src):
                 copy_static(src, os.path.join(out, name, "index.html"))
                 n_static += 1
+        # nested blog posts (vendor/static/blog/<category>/<slug>/index.html)
+        blog_root = os.path.join(args.static_from, "blog")
+        if os.path.isdir(blog_root):
+            for root, _dirs, files in os.walk(blog_root):
+                for fn in files:
+                    if fn.endswith(".html"):
+                        rel = os.path.relpath(os.path.join(root, fn), args.static_from)
+                        if rel != os.path.join("blog", "index.html"):
+                            copy_static(os.path.join(root, fn), os.path.join(out, rel))
+                            n_static += 1
+
         for f in ("index.html", "404.html"):
             src = os.path.join(args.static_from, f)
             if os.path.isfile(src):
@@ -1070,6 +1091,28 @@ def main():
         urls.append((f"/{st}/", "0.8"))
         counts["state_hub"] += 1
 
+    # per-item hero photos for the national hubs, drawn from the hero pool
+    def hub_photo(key):
+        if not PHOTOS:
+            return ""
+        pool = sorted(k for k, v in PHOTOS.items() if v["slot"] in ("hero", "process"))
+        if not pool:
+            return ""
+        pk = pool[sum(map(ord, key)) % len(pool)]
+        hp = PHOTOS[pk]
+        webp = ", ".join(f"/assets/img/{pk}-{w}.webp {w}w" for w in hp["widths"])
+        jpg = ", ".join(f"/assets/img/{pk}-{w}.jpg {w}w" for w in hp["widths"])
+        alt = hp["alt"].replace("{city}", "customer's").replace("{item}", key.replace("-", " "))
+        return f'''    <figure class="hub-hero-photo">
+      <picture>
+        <source type="image/webp" srcset="{webp}" sizes="(max-width: 900px) 100vw, 900px">
+        <img src="/assets/img/{pk}-{hp['widths'][-1]}.jpg" srcset="{jpg}"
+             sizes="(max-width: 900px) 100vw, 900px" width="{hp['width']}" height="{hp['height']}"
+             loading="eager" fetchpriority="high" decoding="async" alt="{escape(alt)}">
+      </picture>
+    </figure>
+'''
+
     # ---- national item hubs ---------------------------------------------
     for key, item in items.items():
         tier1 = sorted([c for c in cities if c["tier"] == 1 and covered(c, item)],
@@ -1084,7 +1127,8 @@ def main():
             f"same-day and next-day pickup, donation routing first. Also searched as "
             f"{', '.join(item['synonyms'])}.",
             groups, cfg, f"/{item['slug']}/",
-            [("Home", "/"), (f"{item['label']} Removal", f"/{item['slug']}/")])
+            [("Home", "/"), (f"{item['label']} Removal", f"/{item['slug']}/")],
+            hero_media=hub_photo(key))
         write(os.path.join(out, item["slug"], "index.html"), html)
         urls.append((f"/{item['slug']}/", "0.9"))
         counts["item_hub"] += 1
