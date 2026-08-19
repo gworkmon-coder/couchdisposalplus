@@ -226,10 +226,12 @@
   .btn-price:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 0 var(--black); }
 
   /* trust badge strip + locations hero */
-  .hub-hero-photo { margin: 0 0 30px; max-width: 900px; }
+  .hub-hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+  @media (max-width: 900px) { .hub-hero-grid { grid-template-columns: 1fr; gap: 28px; } }
+  .hub-hero-photo { margin: 0; }
   .hub-hero-photo img { width: 100%; height: auto; display: block; border-radius: 14px;
     border: 1.5px solid var(--black); box-shadow: 8px 8px 0 0 var(--black);
-    aspect-ratio: 3/2; object-fit: cover; background: #eef1f0; }
+    aspect-ratio: 4/3; object-fit: cover; background: #eef1f0; max-height: 440px; }
   .h1-pin { width: .82em; height: .82em; display: inline-block; vertical-align: -0.08em;
     color: var(--teal-deep); margin-right: 6px; }
 
@@ -250,4 +252,21 @@
   .article-cta p{margin:0;font-weight:600}
   .author-box{display:flex;gap:16px;align-items:flex-start;border-top:1px solid rgba(0,0,0,.1);margin-top:48px;padding-top:26px;max-width:760px}
   .author-box .avatar{width:56px;height:56px;border-radius:50%;background:var(--teal-tint);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--teal-deep);flex-shrink:0}
+
+  /* blog posts */
+  .post-wrap { max-width: 780px; }
+  .post h1 { font-size: clamp(34px, 4.4vw, 54px); line-height: 1.05; letter-spacing: -0.03em; margin: 10px 0 8px; }
+  .post-byline { color: #5a6663; font-size: .92rem; margin-bottom: 26px; }
+  .post-body h2 { font-size: 1.5rem; margin: 34px 0 12px; letter-spacing: -0.02em; }
+  .post-body h3 { font-size: 1.12rem; margin: 26px 0 8px; }
+  .post-body p { line-height: 1.75; margin: 0 0 16px; }
+  .post-body ul { margin: 0 0 18px 22px; line-height: 1.7; }
+  .post-table-wrap { overflow-x: auto; margin: 18px 0 24px; }
+  .post-table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+  .post-table th, .post-table td { border: 1px solid rgba(0,0,0,.12); padding: 10px 12px; text-align: left; }
+  .post-table th { background: var(--teal-tint); font-weight: 700; }
+  .post-cta { margin-top: 44px; border: 1.5px solid var(--black); border-radius: 14px;
+    padding: 28px; box-shadow: 6px 6px 0 0 var(--black); }
+  .post-cta h2 { margin: 0 0 6px; }
+  .post-tile .city-name { white-space: normal; line-height: 1.35; }
 </style>

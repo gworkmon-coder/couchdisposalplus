@@ -18,6 +18,7 @@ Usage:  python3 scripts/build.py [--limit-states co,tx] [--out dist]
 """
 import argparse, csv, hashlib, json, math, os, re, shutil, sys, collections
 import localcontent
+import make_blog
 from html import escape
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -752,10 +753,13 @@ def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb,
 <body>
 {nav}
 <section class="hero">
-  <div class="wrap">
+  <div class="wrap{' hub-hero-grid' if hero_media else ''}">
+    <div>
+      <h1>{h1_icon}{escape(h1)}</h1>
+      <p class="hero-sub">{escape(intro)}</p>
+      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
+    </div>
 {hero_media}
-    <h1>{h1_icon}{escape(h1)}</h1>
-    <p class="hero-sub">{escape(intro)}</p>
   </div>
 </section>
 <section class="section cities-section">
@@ -888,6 +892,21 @@ def build_redirects(cities, items, out, cfg, legacy_path):
         lines.append("")
 
     lines += ["# " + "-" * 69,
+              "# BLOG \u2014 WORDPRESS PROXY",
+              "# The blog still lives (and publishes) on WordPress: 72 posts and",
+              "# growing. Top posts are restored statically above; everything else",
+              "# under /blog/ should proxy to the WordPress origin so no post ever",
+              "# 404s and new posts appear automatically. Static files win over this",
+              "# rule, so restored posts stay fast.",
+              "#",
+              "# TO ACTIVATE before DNS cutover:",
+              "#   1. Give WordPress a stable hostname, e.g. wp.couchdisposalplus.com",
+              "#   2. Uncomment the two lines below and replace WP_ORIGIN",
+              "#",
+              "# /blog/*              https://WP_ORIGIN/blog/:splat              200",
+              "# /wp-content/*        https://WP_ORIGIN/wp-content/:splat        200",
+              "",
+              "# " + "-" * 69,
               "# BLOG \u2014 DO NOT REDIRECT. These are the highest-traffic URLs on the",
               "# site. They must be rebuilt at their existing paths.",
               "# " + "-" * 69,
@@ -966,7 +985,7 @@ def main():
     os.makedirs(out, exist_ok=True)
 
     # carry over hand-built core pages from the existing deploy
-    CORE = ["about", "blog", "book-online", "contact", "donation-pickup", "how-it-works",
+    CORE = ["about", "book-online", "contact", "donation-pickup", "how-it-works",
             "pricing", "privacy", "reviews", "sitemap", "terms", "track-order"]
     WORKMON_SNIPPET = (
         '<script>\n  // Workmon drawer guard. Their embed can stack a new drawer on each CTA\n  // click, which is why closing took several X clicks. Two defenses:\n  //  1. capture-phase click guard: if a drawer is already open, swallow the\n  //     duplicate open so a second/third instance never stacks\n  //  2. Escape key force-closes any drawer and restores page scroll\n  // This is a shim; the underlying stacking is Workmon\'s to fix.\n  (function () {\n    document.addEventListener(\'click\', function (e) {\n      var btn = e.target && e.target.closest && e.target.closest(\'[data-workmon-open]\');\n      if (!btn) return;\n      if (document.querySelector(\'[data-workmon-modal]\')) {\n        e.preventDefault();\n        e.stopImmediatePropagation();\n      }\n    }, true);\n    document.addEventListener(\'keydown\', function (e) {\n      if (e.key !== \'Escape\') return;\n      var els = document.querySelectorAll(\'[data-workmon-modal]\');\n      if (!els.length) return;\n      for (var i = 0; i < els.length; i++) {\n        els[i].parentNode && els[i].parentNode.removeChild(els[i]);\n      }\n      document.documentElement.style.overflow = \'\';\n      document.body.style.overflow = \'\';\n    });\n  })();\n</script>\n'
@@ -1120,6 +1139,22 @@ def main():
         groups = [(f"Top cities for {item['h1_noun']}",
                    [(f"{c['city_name']}, {c['state_code'].upper()}",
                      f"/{c['state_code']}/{c['city_slug']}/{item['slug']}/") for c in tier1])]
+        hub_hero = ""
+        pics = pick_photos("us", item["slug"], key)
+        if "hero" in pics:
+            hk = pics["hero"]; hp = PHOTOS[hk]
+            webp = ", ".join(f"/assets/img/{hk}-{w}.webp {w}w" for w in hp["widths"])
+            jpg = ", ".join(f"/assets/img/{hk}-{w}.jpg {w}w" for w in hp["widths"])
+            alt = hp["alt"].replace("{city}", "customer's").replace("{item}", item["label"].lower())
+            hub_hero = f'''    <figure class="hub-hero-photo">
+      <picture>
+        <source type="image/webp" srcset="{webp}" sizes="(max-width: 900px) 100vw, 900px">
+        <img src="/assets/img/{hk}-{hp['widths'][-1]}.jpg" srcset="{jpg}"
+             sizes="(max-width: 900px) 100vw, 900px" width="{hp['width']}" height="{hp['height']}"
+             loading="eager" fetchpriority="high" decoding="async" alt="{escape(alt)}">
+      </picture>
+    </figure>
+'''
         html = render_hub(
             f"{item['label']} Removal | Nationwide Pickup from ${item['price']} | {cfg['brand']}",
             f"{item['label']} removal, nationwide",
@@ -1164,6 +1199,18 @@ def main():
                      [("Home", "/"), ("Locations", "/locations/")],
                      hero_media=loc_hero, h1_icon=PIN))
     urls.append(("/locations/", "0.9"))
+
+    # ---- blog: restored posts + category pages + index -------------------
+    n_restored, n_known = make_blog.build_blog(out, cfg, load_partial, write)
+    for pth in ("/blog/",) :
+        urls.append((pth, "0.8"))
+    for cslug in ("home-cleaning", "junk-removal", "eco-friendly-living"):
+        urls.append((f"/blog/{cslug}/", "0.6"))
+    import json as _json
+    for pst in _json.load(open(os.path.join(DATA, "blog_index.json")))["posts"]:
+        if os.path.isfile(os.path.join(out, pst["path"].strip("/"), "index.html")):
+            urls.append((pst["path"], "0.8"))
+    print(f"blog               : {n_restored} restored static, {n_known} listed (rest proxy to WordPress)")
 
     # ---- redirects + sitemaps + robots ----------------------------------
     n_legacy, n_flat, n_don, n_art = build_redirects(cities, items, out, cfg, args.legacy_redirects)
