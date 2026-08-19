@@ -45,7 +45,7 @@ OVERRIDES = {
     "st-charles":"St. Charles", "st-cloud":"St. Cloud", "st-johns":"St. Johns",
     "st-augustine":"St. Augustine", "st-george-island":"St. George Island",
     "washington-dc":"Washington, D.C.", "the-bronx":"The Bronx",
-    "wilkes-barre-township":"Wilkes-Barre Township",
+    "wilkes-barre-township":"Wilkes-Barre Township", "land-o-lakes":"Land O' Lakes",
 }
 
 
@@ -63,8 +63,6 @@ def prettify(slug: str) -> str:
             out.append("Mc" + p[2:].capitalize())
         elif p.startswith("mac") and len(p) > 5:
             out.append("Mac" + p[3:].capitalize())
-        elif re.match(r"^o[bcdfghklmnprst]", p) and len(p) > 4 and p[1] not in "aeiou":
-            out.append("O'" + p[1:].capitalize())        # ofallon -> O'Fallon
         else:
             out.append(p.capitalize())
     return " ".join(out)

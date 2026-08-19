@@ -24,6 +24,14 @@ substituted in.
 import math
 
 
+def fix_articles(t):
+    """'a Austin living room' -> 'an Austin living room'."""
+    import re as _re
+    t = _re.sub(r"\ba ([AEIOU])", r"an \1", t)
+    t = _re.sub(r"\bA ([AEIOU])", r"An \1", t)
+    return t
+
+
 def haversine(a_lat, a_lng, b_lat, b_lng):
     r = 3958.8
     p1, p2 = math.radians(a_lat), math.radians(b_lat)
@@ -109,7 +117,7 @@ def region_of(city, state_cities):
     lng_r = max(lngs) - min(lngs)
     lat_p = (city["lat"] - min(lats)) / lat_r if lat_r else 0.5
     lng_p = (city["lng"] - min(lngs)) / lng_r if lng_r else 0.5
-    if 0.35 < lat_p < 0.65 and 0.35 < lng_p < 0.65:
+    if 0.30 < lat_p < 0.70 and 0.30 < lng_p < 0.70:
         return "central"
     if abs(lat_p - 0.5) >= abs(lng_p - 0.5):
         return "north" if lat_p > 0.5 else "south"
@@ -147,7 +155,8 @@ def build(city, state_name, state_cities, nearby):
             t = t.replace("{" + k + "}", v)
         return t
 
-    paras = [f(band(pop, POP_BANDS)), f(rank_band(rank)), f(cluster_band(len(within25)))]
+    paras = [fix_articles(f(band(pop, POP_BANDS))), fix_articles(f(rank_band(rank))),
+             fix_articles(f(cluster_band(len(within25))))]
 
     if anchor["city_slug"] != city["city_slug"] and anchor_d > 1:
         paras.append(
@@ -207,8 +216,8 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
                   f"so the assigned Loader arrives at the right door."))
         q.append((f"Is street parking a problem for {cname} pickups?",
                   f"In permit-only and metered parts of {cname} the Loader will stage as close as the "
-                  f"restrictions allow and carry from there. There is no additional charge for a longer "
-                  f"carry \u2014 the quoted price stands."))
+                  f"restrictions allow and carry from there. A longer carry doesn't change your "
+                  f"quoted price when access was described accurately at booking."))
     else:
         q.append((f"Can the truck reach my driveway in {cname}?",
                   f"Almost always. Most {cname} properties allow the Loader to back up close to the "
@@ -229,6 +238,10 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
                   f"Yes. The {cname} service area includes {tail}. Those pickups route through the "
                   f"same Loader pool at the same price, with no out-of-area surcharge."))
 
+    q.append(("Do you handle stairs and walk-ups?",
+              "Yes. In-home pickup covers walk-ups, basements, and tight stairwells. Standard stair "
+              "access is included in the quoted price when noted at booking; unusual access or "
+              "changes to the job on site are priced per our Terms."))
     q.append((f"Where do {item['plural']} from {cname} end up?",
               item["faq_disposal"].replace("{city}", cname).replace("{state}", sname)))
     q.append((f"Who actually collects my {label} in {cname}?",

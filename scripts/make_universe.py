@@ -69,7 +69,9 @@ def main():
         st, slug = key
         p = prod.get(key)
         g = geo.get(key)
-        name = p["city_name"] if p else g["name"]
+        # geonames carries the real display name (Orlando, New Orleans, O'Fallon);
+        # the slug-derived name is a fallback for production-only records
+        name = g["name"] if g else p["city_name"]
         if g:
             lat, lng, gsrc = g["lat"], g["lng"], "geonames"
         else:

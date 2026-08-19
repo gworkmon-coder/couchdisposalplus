@@ -186,8 +186,10 @@ def pick_photos(st, slug, item_key):
 def render_photo(key, cname, item_label, eager=False, sizes="(max-width: 780px) 100vw, 780px"):
     """<picture> with WebP + JPEG, explicit dimensions, lazy by default."""
     p = PHOTOS[key]
-    alt = p["alt"].replace("{city}", cname).replace("{item}", item_label.lower())
-    cap = p["caption"].replace("{city}", cname).replace("{item}", item_label.lower())
+    alt = localcontent.fix_articles(
+        p["alt"].replace("{city}", cname).replace("{item}", item_label.lower()))
+    cap = localcontent.fix_articles(
+        p["caption"].replace("{city}", cname).replace("{item}", item_label.lower()))
     webp = ", ".join(f"/assets/img/{key}-{w}.webp {w}w" for w in p["widths"])
     jpg = ", ".join(f"/assets/img/{key}-{w}.jpg {w}w" for w in p["widths"])
     loading = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
@@ -347,8 +349,9 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
         image_schema = (
             '"image": {"@type": "ImageObject", "url": "%s", "width": %d, "height": %d, '
             '"caption": %s},' % (hero_img_url, hp["width"], hp["height"],
-                                  json.dumps(hp["alt"].replace("{city}", cname)
-                                             .replace("{item}", item["label"].lower()))))
+                                  json.dumps(localcontent.fix_articles(
+                                      hp["alt"].replace("{city}", cname)
+                                      .replace("{item}", item["label"].lower())))))
         primary_image = '{ "@type": "ImageObject", "url": "%s" }' % hero_img_url
     else:
         hero_img_url, image_schema, primary_image = "", "", "null"
@@ -357,7 +360,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     direct_answer = (
         f"{item['label']} removal in {cname}, {st.upper()} starts at ${price}. "
         f"{cfg['brand']} prices every pickup online up front \u2014 no in-home quote. "
-        f"Stairs, disassembly, and haul-away are included. Same-day pickup is available "
+        f"Standard stair access and disassembly are included when noted at booking. Same-day pickup is available "
         f"when you book before noon; next-day is standard. Donatable {item['plural']} are "
         f"routed to {sname} charity partners first.")
 
@@ -497,7 +500,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     {{ "@type": "HowToStep", "position": 2, "name": "Pick a pickup window",
        "text": "Same-day if booked before noon, next-day by default. Choose a 4-hour window and confirmation is sent immediately.", "url": "{url}#step2" }},
     {{ "@type": "HowToStep", "position": 3, "name": "Pay upfront online",
-       "text": "Your card is charged at booking. There are no in-person charges and no on-site upcharges.", "url": "{url}#step3" }},
+       "text": "Your card is charged at booking. The price is guaranteed for the scope you book; on-site changes are priced per our Terms.", "url": "{url}#step3" }},
     {{ "@type": "HowToStep", "position": 4, "name": "A {cname} Loader collects the {item['label'].lower()}",
        "text": "An independent local Loader arrives in the window, handles stairs and disassembly, and routes the item to {sname} donation or recycling partners.", "url": "{url}#step4" }}
   ]
@@ -648,7 +651,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     <div class="how-steps">
       <div class="how-step"><span class="step-num"><em>01</em></span><h3>Get instant {escape(cname)} price</h3><p>Enter your {escape(cname)}-area ZIP and pick the items going. Your guaranteed price displays immediately.</p></div>
       <div class="how-step"><span class="step-num"><em>02</em></span><h3>Pick a pickup window</h3><p>Same-day if booked before noon, next-day default. Choose a 4-hour window. Confirmation sent immediately.</p></div>
-      <div class="how-step"><span class="step-num"><em>03</em></span><h3>Pay upfront online</h3><p>Card charged at booking &mdash; no in-person charges, no on-site upcharges. The price you saw is the price you pay.</p></div>
+      <div class="how-step"><span class="step-num"><em>03</em></span><h3>Pay upfront online</h3><p>Card charged at booking. Your price is guaranteed for the scope you book &mdash; if items or access change on site, adjustments follow our Terms.</p></div>
       <div class="how-step"><span class="step-num"><em>04</em></span><h3>{escape(cname)} Loader arrives</h3><p>An independent local Loader arrives in window, lifts the {escape(item['label'].lower())}, and routes it through local partners.</p></div>
     </div>
 {photo_trust}
@@ -987,7 +990,7 @@ def main():
 
     # carry over hand-built core pages from the existing deploy
     CORE = ["about", "book-online", "contact", "donation-pickup", "how-it-works",
-            "pricing", "privacy", "reviews", "sitemap", "terms", "track-order"]
+            "pricing", "privacy", "reviews", "terms", "track-order"]
     WORKMON_SNIPPET = (
         '<script>\n  // Workmon drawer guard. Their embed can stack a new drawer on each CTA\n  // click, which is why closing took several X clicks. Two defenses:\n  //  1. capture-phase click guard: if a drawer is already open, swallow the\n  //     duplicate open so a second/third instance never stacks\n  //  2. Escape key force-closes any drawer and restores page scroll\n  // This is a shim; the underlying stacking is Workmon\'s to fix.\n  (function () {\n    document.addEventListener(\'click\', function (e) {\n      var btn = e.target && e.target.closest && e.target.closest(\'[data-workmon-open]\');\n      if (!btn) return;\n      if (document.querySelector(\'[data-workmon-modal]\')) {\n        e.preventDefault();\n        e.stopImmediatePropagation();\n      }\n    }, true);\n    document.addEventListener(\'keydown\', function (e) {\n      if (e.key !== \'Escape\') return;\n      var els = document.querySelectorAll(\'[data-workmon-modal]\');\n      if (!els.length) return;\n      for (var i = 0; i < els.length; i++) {\n        els[i].parentNode && els[i].parentNode.removeChild(els[i]);\n      }\n      document.documentElement.style.overflow = \'\';\n      document.body.style.overflow = \'\';\n    });\n  })();\n</script>\n'
         "\n<!-- Workmon slideout launcher -->\n"
@@ -1194,7 +1197,7 @@ def main():
     write(os.path.join(out, "locations", "index.html"),
           render_hub(f"All Locations | 50 States | {cfg['brand']}",
                      "Couch removal in all 50 states",
-                     f"{len(cities):,} cities across {len(by_state)} states. "
+                     f"{len(cities):,} cities across all 50 states and Washington, D.C. "
                      "Upfront online pricing everywhere we operate.",
                      groups, cfg, "/locations/",
                      [("Home", "/"), ("Locations", "/locations/")],
@@ -1213,11 +1216,38 @@ def main():
             urls.append((pst["path"], "0.8"))
     print(f"blog               : {n_restored} restored static, {n_known} listed (rest proxy to WordPress)")
 
+    # ---- human-readable /sitemap/ from the real route registry -----------
+    st_counts = {st: len(cs) for st, cs in by_state.items()}
+    groups = [("Core pages",
+               [("Home", "/"), ("Pricing", "/pricing/"), ("Locations", "/locations/"),
+                ("Reviews", "/reviews/"), ("How It Works", "/how-it-works/"),
+                ("Donation Pickup", "/donation-pickup/"), ("Blog", "/blog/"),
+                ("Book Online", "/book-online/"), ("Track Order", "/track-order/"),
+                ("About", "/about/"), ("Contact", "/contact/")]),
+              ("Services",
+               [(items[k]["label"] + " Removal", f"/{items[k]['slug']}/") for k in items]),
+              ("States",
+               [(f"{states[st]} ({st_counts[st]} cities)", f"/{st}/")
+                for st in sorted(by_state, key=lambda x: states[x])])]
+    write(os.path.join(out, "sitemap", "index.html"),
+          render_hub(f"Site Map | {cfg['brand']}",
+                     "Every page on the site",
+                     f"{len(cities):,} city pages across all 50 states and Washington, D.C., "
+                     f"plus {len(items)} nationwide services.",
+                     groups, cfg, "/sitemap/",
+                     [("Home", "/"), ("Site Map", "/sitemap/")]))
+    urls.append(("/sitemap/", "0.3"))
+
     # ---- redirects + sitemaps + robots ----------------------------------
     n_legacy, n_flat, n_don, n_art = build_redirects(cities, items, out, cfg, args.legacy_redirects)
     n_shards = build_sitemaps(urls, out, cfg)
-    write(os.path.join(out, "robots.txt"),
-          f"User-agent: *\nAllow: /\n\nSitemap: {cfg['domain']}/sitemap.xml\n")
+    if os.environ.get("NOINDEX") == "1":
+        write(os.path.join(out, "robots.txt"), "User-agent: *\nDisallow: /\n")
+        write(os.path.join(out, "_headers"), "/*\n  X-Robots-Tag: noindex\n")
+        print("NOINDEX=1: preview build is blocked from indexing")
+    else:
+        write(os.path.join(out, "robots.txt"),
+              f"User-agent: *\nAllow: /\n\nSitemap: {cfg['domain']}/sitemap.xml\n")
 
     # ---- report ----------------------------------------------------------
     print(f"static pages kept : {n_static}")
