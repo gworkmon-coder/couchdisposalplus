@@ -26,6 +26,8 @@ PARTS = os.path.join(ROOT, "partials")
 
 STATE_INDEX = {}
 
+CSS_HREF = "/assets/site.css"
+
 CONFIG = {
     "domain": "https://couchdisposalplus.com",
     "brand": "Couch Disposal Plus",
@@ -66,6 +68,8 @@ def fill(text, **kw):
 
 def write(path, content):
     os.makedirs(os.path.dirname(path), exist_ok=True)
+    if path.endswith(".html"):
+        content = content.replace('href="/assets/site.css"', f'href="{CSS_HREF}"')
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
@@ -1014,10 +1018,16 @@ def main():
     if PRICING:
         print(f"pricing overrides  : {len(PRICING):,} city/item rows")
 
-    # single cached stylesheet instead of ~40KB inlined on every page
+    # single cached stylesheet instead of ~40KB inlined on every page.
+    # Content-hashed filename: /assets/* is served immutable, so an
+    # unversioned site.css would be cached stale forever after any change.
+    global CSS_HREF
     css = load_partial("style.html")
     css = css.split("</style>")[0].replace("<style>", "")
-    write(os.path.join(out, "assets", "site.css"), css)
+    css_hash = hashlib.md5(css.encode()).hexdigest()[:10]
+    CSS_HREF = f"/assets/site.{css_hash}.css"
+    write(os.path.join(out, "assets", f"site.{css_hash}.css"), css)
+    write(os.path.join(out, "assets", "site.css"), css)  # legacy-URL fallback
 
     global STATE_INDEX
     STATE_INDEX = collections.defaultdict(list)
