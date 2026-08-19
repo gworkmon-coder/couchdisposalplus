@@ -19,6 +19,7 @@ Usage:  python3 scripts/build.py [--limit-states co,tx] [--out dist]
 import argparse, csv, hashlib, json, math, os, re, shutil, sys, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import localcontent
+from localcontent import inject_gtm, GTM_HEAD_SNIPPET as GTM_HEAD
 import make_blog
 from html import escape
 
@@ -27,6 +28,7 @@ DATA = os.path.join(ROOT, "data")
 PARTS = os.path.join(ROOT, "partials")
 
 STATE_INDEX = {}
+
 
 CSS_HREF = "/assets/site.css"
 
@@ -272,6 +274,11 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     d = cfg["domain"]
     st, slug = city["state_code"], city["city_slug"]
     cname, sname = city["city_name"], states[st]
+
+    # structural variation: page-hash drives section shape, not just wording
+    page_seed = int(hashlib.md5(f"{st}/{slug}/{item_key}/v2".encode()).hexdigest(), 16)
+    n_tiles = (10, 12)[page_seed % 2]
+    facts_first = (page_seed >> 3) % 2 == 0
     url = f"{d}/{st}/{slug}/{item['slug']}/"
     price = price_for(st, slug, item_key, items)
 
@@ -310,7 +317,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
     # ---- nearby city tiles ------------------------------------------------
     tiles = []
-    for o in nearby[(st, slug)]:
+    for o in nearby[(st, slug)][:n_tiles]:
         if not covered(o, item):
             continue
         tiles.append(
@@ -327,6 +334,10 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
     # per-city differentiation (combinatorial, all facts from universe.csv)
     paras, facts = localcontent.build(city, sname, STATE_INDEX[st], nearby[(st, slug)])
+    im_copy = localcontent.item_market_copy(item_key, city)
+    if im_copy:
+        paras.insert(0, im_copy)
+
     local_blocks = "\n".join(f'    <p class="section-sub">{escape(b)}</p>' for b in paras)
     facts_rows = "\n".join(
         f'        <tr><th scope="row">{escape(k)}</th><td>{escape(v)}</td></tr>' for k, v in facts)
@@ -406,6 +417,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 <meta property="og:type" content="website">
 <meta property="og:url" content="{url}">
 
+{GTM_HEAD}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -612,8 +624,8 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
       <h2>Pickup logistics in <em>{escape(cname)}</em>.</h2>
     </div>
 {local_blocks}
-{photo_process}
-{facts_table}
+{facts_table if facts_first else photo_process}
+{photo_process if facts_first else facts_table}
   </div>
 </section>
 
@@ -740,6 +752,7 @@ def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb,
 <meta name="description" content="{escape(intro[:300])}">
 <link rel="canonical" href="{d}{canonical}">
 <meta name="robots" content="index, follow">
+{GTM_HEAD}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -1005,6 +1018,7 @@ def main():
         Pages that already carry a launcher (homepage, book-online) pass
         through untouched so their hand-placed embeds stay authoritative."""
         html = open(src, encoding="utf-8").read()
+        html = inject_gtm(html)
         if "data-workmon-launcher" not in html and "embed/textus.js" not in html:
             html = html.replace(
                 '<script type="module" src="https://workmon.ai/embed.js"></script>', "")

@@ -1,3 +1,24 @@
+GTM_HEAD_SNIPPET = """<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PT22N9H');</script>
+<!-- End Google Tag Manager -->"""
+
+GTM_BODY_SNIPPET = """<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PT22N9H"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->"""
+
+
+def inject_gtm(html):
+    if "googletagmanager.com/gtm.js" in html:
+        return html
+    html = html.replace("</head>", GTM_HEAD_SNIPPET + "\n</head>", 1)
+    html = html.replace("<body>", "<body>\n" + GTM_BODY_SNIPPET, 1)
+    return html
+
 #!/usr/bin/env python3
 """
 localcontent.py — per-city copy generation.
@@ -250,3 +271,39 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
               f"jobs through the platform. The platform handles booking, scheduling, payment and "
               f"support; the assigned Loader performs the pickup and disposal."))
     return q[:6]
+
+
+# --------------------------------------------------------------------------
+# item x market interaction copy: what THIS item means in THIS kind of market
+# --------------------------------------------------------------------------
+def market_kind(pop):
+    if pop >= 200000: return "metro"
+    if pop >= 30000: return "suburban"
+    return "light"
+
+
+ITEM_MARKET = {
+ ("couch","metro"): "In {city}, the couch itself is rarely the constraint \u2014 building logistics are. Loaders here are used to freight-elevator reservations, service entrances, and carrying a three-seater down from a walk-up without scuffing a stairwell wall.",
+ ("couch","suburban"): "Most {city} couch pickups run from single-family homes, which means a short driveway carry and a fast job. This is the configuration where same-day windows are easiest to hit.",
+ ("couch","light"): "In {city}, couch pickups ride regional routes, so the Loader arriving often has several stops in the surrounding area \u2014 booking a day ahead lets the route form around you.",
+ ("sectional","metro"): "Sectionals are the piece most likely to defeat a {city} elevator. Loaders split the sections at the connector brackets in the apartment, which is why multi-piece disassembly is built into the price here rather than negotiated in the hallway.",
+ ("sectional","suburban"): "A {city} sectional pickup is usually a garage-door job: sections come apart in the living room and go out the widest opening. Five-piece modulars are routine.",
+ ("sectional","light"): "Large sectionals are the item {city} customers most often can't move themselves \u2014 no truck is big enough and no buyer wants to haul one. That's exactly the pickup regional Loaders are equipped for.",
+ ("sleeper-sofa","metro"): "A sleeper's fold-out steel frame doubles its weight, and in {city} stairwells that weight shifts mid-carry if it isn't strapped. Loaders secure the mechanism closed before the piece leaves the room \u2014 non-negotiable in a walk-up.",
+ ("sleeper-sofa","suburban"): "Sleeper sofas out of {city} homes are heavy but straightforward: strap the mechanism, two-person lift, short carry. The internal bed frame is separated for steel recycling after pickup.",
+ ("sleeper-sofa","light"): "Sleepers are dense enough that {city} customers often underestimate the lift \u2014 the folded bed frame inside is most of the weight. It's priced in, and the Loader brings straps.",
+ ("loveseat","metro"): "A loveseat is the one sofa that clears almost every {city} doorway, elevator, and stair turn without disassembly \u2014 which is why it's the cheapest pickup on the platform here.",
+ ("loveseat","suburban"): "Loveseat pickups in {city} are the fastest jobs we run \u2014 one doorway, one carry, often under fifteen minutes on site.",
+ ("loveseat","light"): "Even on {city}'s regional routes, a loveseat is an easy add-on \u2014 small enough to bundle with other stops, which keeps the price at the bottom of the sofa range.",
+ ("recliner","metro"): "Power recliners in {city} apartments need one prep step: unplug and coil the cord before the window. Motors, transformers, and any battery backup are pulled for e-waste recycling rather than riding to a transfer station.",
+ ("recliner","suburban"): "Recliners out of {city} homes are compact but dense \u2014 lift chairs especially. The Loader straps the footrest closed and handles the motor as e-waste after pickup.",
+ ("recliner","light"): "Medical lift chairs are a common {city} pickup \u2014 note the battery backup at booking so it's pulled and recycled separately from the frame.",
+ ("futon","metro"): "Futon frames are the easiest piece to get out of a tight {city} apartment \u2014 the frame breaks down in minutes and the mattress folds. Both go in one pickup at one price.",
+ ("futon","suburban"): "A {city} futon pickup covers frame and mattress together. Wood frames are donation candidates when hardware is intact; cotton-fill mattresses route to material recovery.",
+ ("futon","light"): "Futons on {city} routes travel disassembled \u2014 the frame packs flat, which makes this one of the easiest items to bundle with a larger regional pickup.",
+}
+
+
+def item_market_copy(item_key, city):
+    t = ITEM_MARKET.get((item_key, market_kind(city["population"])))
+    return fix_articles(t.replace("{city}", city["city_name"])) if t else ""

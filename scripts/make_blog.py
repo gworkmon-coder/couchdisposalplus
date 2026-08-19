@@ -17,6 +17,7 @@ Called from build.py; uses its partials and CSS pipeline.
 """
 import json, os, re
 from html import escape
+from localcontent import GTM_HEAD_SNIPPET as GTM_HEAD
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -94,6 +95,7 @@ def shell(cfg, load_partial, title, desc, canonical, body, breadcrumb_html, sche
 <meta name="description" content="{escape(desc)}">
 <link rel="canonical" href="{cfg['domain']}{canonical}">
 <meta name="robots" content="index, follow, max-image-preview:large">
+{GTM_HEAD}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
