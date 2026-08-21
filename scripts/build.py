@@ -1252,6 +1252,23 @@ def main():
                      [("Home", "/"), ("Site Map", "/sitemap/")]))
     urls.append(("/sitemap/", "0.3"))
 
+    # ---- legacy recrawl sitemap: old ranking URLs that now 301 -----------
+    # Submitted to GSC temporarily so Google recrawls the old URLs and
+    # processes the redirects quickly. Remove from GSC after ~60 days.
+    legacy = []
+    if os.path.isfile(os.path.join(ROOT, "vendor", "gsc-pages.csv")):
+        seen = set()
+        for r in csv.DictReader(open(os.path.join(ROOT, "vendor", "gsc-pages.csv"))):
+            pth = r["Top pages"].split("couchdisposalplus.com")[-1]
+            if pth in seen or os.path.isfile(os.path.join(out, pth.strip("/"), "index.html")):
+                continue
+            seen.add(pth)
+            legacy.append(f"  <url><loc>{cfg['domain']}{pth}</loc></url>")
+        write(os.path.join(out, "sitemap-legacy.xml"),
+              '<?xml version="1.0" encoding="UTF-8"?>\n'
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+              + "\n".join(legacy) + "\n</urlset>\n")
+
     # ---- redirects + sitemaps + robots ----------------------------------
     n_legacy, n_flat, n_don, n_art = build_redirects(cities, items, out, cfg, args.legacy_redirects)
     n_shards = build_sitemaps(urls, out, cfg)
