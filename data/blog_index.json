@@ -1,23 +1,94 @@
 {
-  "categories": {
-    "home-cleaning": "Home Cleaning",
-    "junk-removal": "Junk Removal",
-    "eco-friendly-living": "Eco-Friendly Living"
+ "categories": {
+  "home-cleaning": "Home Cleaning",
+  "junk-removal": "Junk Removal",
+  "eco-friendly-living": "Eco-Friendly Living"
+ },
+ "posts": [
+  {
+   "path": "/blog/home-cleaning/how-much-is-a-used-couch-worth/",
+   "category": "home-cleaning",
+   "title": "How Much Is a Used Couch Worth? [$50\u2013$400 Guide]"
   },
-  "posts": [
-    {"path": "/blog/home-cleaning/how-much-is-a-used-couch-worth/", "category": "home-cleaning", "title": "How Much Is a Used Couch Worth? [$50\u2013$400 Guide]"},
-    {"path": "/blog/home-cleaning/how-to-remove-allergens-from-couch/", "category": "home-cleaning", "title": "How to Remove Allergens from Your Couch"},
-    {"path": "/blog/home-cleaning/why-does-my-couch-make-me-itch/", "category": "home-cleaning", "title": "Why Does My Couch Make Me Itch?"},
-    {"path": "/blog/home-cleaning/what-is-sofa-dermatitis/", "category": "home-cleaning", "title": "What Is Sofa Dermatitis?"},
-    {"path": "/blog/home-cleaning/best-worst-couch-materials-for-allergies/", "category": "home-cleaning", "title": "Best & Worst Couch Materials for Allergies"},
-    {"path": "/blog/home-cleaning/remove-dust-mites-from-your-couch-step-by-step/", "category": "home-cleaning", "title": "Remove Dust Mites from Your Couch, Step by Step"},
-    {"path": "/blog/home-cleaning/how-to-get-vomit-stains-and-smells-out-of-a-couch/", "category": "home-cleaning", "title": "How to Get Vomit Stains and Smells Out of a Couch"},
-    {"path": "/blog/home-cleaning/moldy-couch-removal-tips-when-to-replace/", "category": "home-cleaning", "title": "Moldy Couch: Removal Tips & When to Replace"},
-    {"path": "/blog/junk-removal/can-i-leave-a-couch-on-the-curb/", "category": "junk-removal", "title": "Can I Leave a Couch on the Curb?"},
-    {"path": "/blog/junk-removal/can-i-burn-an-old-couch/", "category": "junk-removal", "title": "Can I Burn an Old Couch?"},
-    {"path": "/blog/junk-removal/can-you-cut-up-a-couch-to-throw-it-away/", "category": "junk-removal", "title": "Can You Cut Up a Couch to Throw It Away?"},
-    {"path": "/blog/junk-removal/how-to-dispose-of-a-sleeper-sofa/", "category": "junk-removal", "title": "How to Dispose of a Sleeper Sofa"},
-    {"path": "/blog/junk-removal/what-happens-to-old-furniture-after-you-get-rid-of-it/", "category": "junk-removal", "title": "What Happens to Old Furniture After You Get Rid of It?"},
-    {"path": "/blog/eco-friendly-living/can-couch-be-donated/", "category": "eco-friendly-living", "title": "Can My Old Couch Be Donated?"}
-  ]
+  {
+   "path": "/blog/home-cleaning/how-to-remove-allergens-from-couch/",
+   "category": "home-cleaning",
+   "title": "How to Remove Allergens from Your Couch"
+  },
+  {
+   "path": "/blog/home-cleaning/why-does-my-couch-make-me-itch/",
+   "category": "home-cleaning",
+   "title": "Why Does My Couch Make Me Itch?"
+  },
+  {
+   "path": "/blog/home-cleaning/what-is-sofa-dermatitis/",
+   "category": "home-cleaning",
+   "title": "What Is Sofa Dermatitis?"
+  },
+  {
+   "path": "/blog/home-cleaning/best-worst-couch-materials-for-allergies/",
+   "category": "home-cleaning",
+   "title": "Best & Worst Couch Materials for Allergies"
+  },
+  {
+   "path": "/blog/home-cleaning/remove-dust-mites-from-your-couch-step-by-step/",
+   "category": "home-cleaning",
+   "title": "Remove Dust Mites from Your Couch, Step by Step"
+  },
+  {
+   "path": "/blog/home-cleaning/how-to-get-vomit-stains-and-smells-out-of-a-couch/",
+   "category": "home-cleaning",
+   "title": "How to Get Vomit Stains and Smells Out of a Couch"
+  },
+  {
+   "path": "/blog/home-cleaning/moldy-couch-removal-tips-when-to-replace/",
+   "category": "home-cleaning",
+   "title": "Moldy Couch: Removal Tips & When to Replace"
+  },
+  {
+   "path": "/blog/junk-removal/can-i-leave-a-couch-on-the-curb/",
+   "category": "junk-removal",
+   "title": "Can I Leave a Couch on the Curb?"
+  },
+  {
+   "path": "/blog/junk-removal/can-i-burn-an-old-couch/",
+   "category": "junk-removal",
+   "title": "Can I Burn an Old Couch?"
+  },
+  {
+   "path": "/blog/junk-removal/can-you-cut-up-a-couch-to-throw-it-away/",
+   "category": "junk-removal",
+   "title": "Can You Cut Up a Couch to Throw It Away?"
+  },
+  {
+   "path": "/blog/junk-removal/how-to-dispose-of-a-sleeper-sofa/",
+   "category": "junk-removal",
+   "title": "How to Dispose of a Sleeper Sofa"
+  },
+  {
+   "path": "/blog/junk-removal/what-happens-to-old-furniture-after-you-get-rid-of-it/",
+   "category": "junk-removal",
+   "title": "What Happens to Old Furniture After You Get Rid of It?"
+  },
+  {
+   "path": "/blog/eco-friendly-living/can-couch-be-donated/",
+   "category": "eco-friendly-living",
+   "title": "Can My Old Couch Be Donated?"
+  },
+  {
+   "path": "/blog/home-cleaning/pet-allergies-and-couches-cleaning-vs-replacing/",
+   "category": "home-cleaning",
+   "title": "Pet Allergies and Couches: Cleaning vs. Replacing"
+  },
+  {
+   "path": "/blog/home-cleaning/how-to-clean-a-used-couch/",
+   "category": "home-cleaning",
+   "title": "How to Clean and Sanitize a Used Couch"
+  },
+  {
+   "path": "/blog/home-cleaning/how-to-get-pet-odors-out-of-sofas-and-rugs/",
+   "category": "home-cleaning",
+   "title": "How to Get Pet Odors Out of Sofas and Rugs"
+  }
+ ]
 }
