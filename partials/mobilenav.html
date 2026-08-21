@@ -8,10 +8,9 @@
     html.js-mnav .nav-actions .btn-ghost { display: none; }
     html.js-mnav .nav-actions { gap: 8px; align-items: center; display: flex; }
     html.js-mnav .nav-actions .btn-cta { font-size: 13px; padding: 8px 12px; }
-    html.js-mnav body { padding-bottom: 64px; }
   }
   @media (min-width: 901px) {
-    .m-call, .m-burger, .m-stickybar { display: none !important; }
+    .m-call, .m-burger { display: none !important; }
   }
   .m-call, .m-burger {
     width: 38px; height: 38px; border: 1.5px solid #111; border-radius: 9px;
@@ -43,14 +42,6 @@
   .m-row .m-btn { flex: 1; }
   .m-track { text-align: center; font-size: 14px; color: #555; padding-top: 12px;
     text-decoration: none; display: block; }
-  .m-stickybar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 99980;
-    display: flex; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    background: #fff; border-top: 1.5px solid #111; }
-  .m-stickybar .m-btn { padding: 11px 0; font-size: 14px; }
-  .m-stickybar .m-btn:first-child { flex: 1; }
-  .m-stickybar .m-btn:last-child { flex: 1.5; }
-  body.m-locked .m-stickybar,
-  body:has([data-workmon-modal]) .m-stickybar { display: none; }
 </style>
 <script>
 (function () {
@@ -94,11 +85,6 @@
     "</div></div>");
   document.body.appendChild(drawer);
 
-  var bar = el('<div class="m-stickybar">' +
-    '<a class="m-btn" href="tel:' + PHONE + '">' + ICONS.phone + " Call now</a>" +
-    '<button class="m-btn lime" data-workmon-open>Get Instant Price \u2192</button>' +
-    "</div>");
-  document.body.appendChild(bar);
 
   function setOpen(open) {
     drawer.classList.toggle("open", open);
