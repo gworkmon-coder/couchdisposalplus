@@ -7,6 +7,8 @@ h1: Why Does My Couch Make Me Itch?
 description: If your couch makes you itch, you're not alone. Learn the real causes — from dust mites and mold to fabric irritation — and how to stop it for good.
 author: Alexa
 date: 2025-10-31
+hero_image: loader-couch-removal-inside
+hero_alt: Two movers lifting an older green fabric sofa out of a living room
 ---
 If your couch makes you itch, you're not imagining it. Over time, furniture collects dust, dander, sweat, and everyday buildup that can irritate skin or trigger allergies.
 

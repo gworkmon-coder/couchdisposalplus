@@ -7,6 +7,8 @@ h1: What Is Sofa Dermatitis?
 description: Learn what sofa dermatitis is, what it looks like, common causes, and how to treat it — plus when to replace your couch for lasting relief.
 author: Alexa
 date: 2025-09-29
+hero_image: loader-couch-removal-inside-2
+hero_alt: A homeowner discussing her fabric sofa with two removal specialists in her living room
 ---
 Sofa dermatitis is a skin rash that often appears after spending time on a couch. It happens when your skin reacts to something in the fabric or cushions — a type of reaction known as contact dermatitis.
 

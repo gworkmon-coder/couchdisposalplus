@@ -7,6 +7,8 @@ h1: How to Remove Allergens from Couch
 description: Learn how to clean allergens from your couch, prevent dust mites, and know when it's time to replace for a healthier home.
 author: Alexa
 date: 2025-08-18
+hero_image: loader-moving-removing-couch-3
+hero_alt: A fabric sofa positioned by open patio doors in bright daylight during a cleaning and removal visit
 ---
 Struggling with sneezing fits after lounging on your sofa? Hidden allergens might be the culprit. Dust, pet dander, and mold spores can quietly build up inside couch fibers, triggering allergic reactions and making your living space less comfortable.
 

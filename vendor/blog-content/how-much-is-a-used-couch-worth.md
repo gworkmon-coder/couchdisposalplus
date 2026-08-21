@@ -7,6 +7,8 @@ h1: How Much Is a Used Couch Worth?
 description: Most used couches sell for $50–$400, but condition, age, and material change everything. See exactly what yours is worth, and when it's not worth selling at all.
 author: Alexa
 date: 2025-08-29
+hero_image: loader-couch-removal-outdoor
+hero_alt: A used three-seat sofa loaded on a pickup truck outside a home, ready to be hauled away
 ---
 At Couch Disposal Plus, we've helped pick up thousands of old couches, and if there's one thing we've learned, it's that most are worth less than people expect.
 

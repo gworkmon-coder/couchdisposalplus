@@ -1219,7 +1219,7 @@ def main():
     urls.append(("/locations/", "0.9"))
 
     # ---- blog: restored posts + category pages + index -------------------
-    n_restored, n_known = make_blog.build_blog(out, cfg, load_partial, write)
+    n_restored, n_known = make_blog.build_blog(out, cfg, load_partial, write, photos=PHOTOS)
     for pth in ("/blog/",) :
         urls.append((pth, "0.8"))
     for cslug in ("home-cleaning", "junk-removal", "eco-friendly-living"):

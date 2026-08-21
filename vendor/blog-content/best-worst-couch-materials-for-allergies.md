@@ -7,6 +7,8 @@ h1: Best & Worst Couch Materials for Allergies
 description: Discover the best and worst couch fabrics for allergies. Learn which materials trap dust mites, dander, and mold — and which are easiest to clean for a healthier home.
 author: Alexa
 date: 2025-08-18
+hero_image: loader-moving-removing-couch-2
+hero_alt: A woven-fabric three-seat sofa being carried across a living room, showing the upholstery texture
 ---
 Not all couches are equal when it comes to allergens. Some fabrics act like a magnet for dust mites, pet dander, and mold spores, while others naturally make it harder for those irritants to settle in.
 

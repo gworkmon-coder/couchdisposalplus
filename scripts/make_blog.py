@@ -80,6 +80,23 @@ def inline(t):
     return t
 
 
+def hero_picture(key, photos, alt):
+    if not key or key not in photos:
+        return "", ""
+    hp = photos[key]
+    webp = ", ".join(f"/assets/img/{key}-{w}.webp {w}w" for w in hp["widths"])
+    jpg = ", ".join(f"/assets/img/{key}-{w}.jpg {w}w" for w in hp["widths"])
+    fig = f'''    <figure class="post-hero">
+      <picture>
+        <source type="image/webp" srcset="{webp}" sizes="(max-width: 820px) 100vw, 780px">
+        <img src="/assets/img/{key}-{hp['widths'][-1]}.jpg" srcset="{jpg}"
+             sizes="(max-width: 820px) 100vw, 780px" width="{hp['width']}" height="{hp['height']}"
+             loading="eager" fetchpriority="high" decoding="async" alt="{escape(alt)}">
+      </picture>
+    </figure>'''
+    return fig, f"/assets/img/{key}-{hp['widths'][-1]}.jpg"
+
+
 def shell(cfg, load_partial, title, desc, canonical, body, breadcrumb_html, schema=""):
     nav = load_partial("nav.html").replace("{{CITY_SLUG}}", "")
     footer = (load_partial("footer.html")
@@ -114,7 +131,8 @@ def shell(cfg, load_partial, title, desc, canonical, body, breadcrumb_html, sche
 '''
 
 
-def build_blog(out, cfg, load_partial, write):
+def build_blog(out, cfg, load_partial, write, photos=None):
+    photos = photos or {}
     inv = json.load(open(os.path.join(ROOT, "data", "blog_index.json")))
     cats = inv["categories"]
     posts_meta = {p["path"]: p for p in inv["posts"]}
@@ -128,6 +146,8 @@ def build_blog(out, cfg, load_partial, write):
                 continue
             meta, md = parse_post(os.path.join(cdir, f))
             path = meta["path"]
+            hero_fig, hero_url = hero_picture(meta.get("hero_image"), photos,
+                                              meta.get("hero_alt", meta["h1"]))
             restored.add(path)
             html_body = md_to_html(md)
             faq_blocks = re.findall(r"<h3>(.*?)</h3>\n      <p>(.*?)</p>", html_body)
@@ -139,14 +159,17 @@ def build_blog(out, cfg, load_partial, write):
                     for q, a in faq_blocks)
                 faq_schema = ('<script type="application/ld+json">\n{ "@context": "https://schema.org", '
                               f'"@type": "FAQPage", "mainEntity": [\n    {ents}\n  ] }}\n</script>\n')
+            img_part = ('"image": %s, ' % json.dumps(cfg["domain"] + hero_url)) if hero_url else ""
             art_schema = ('<script type="application/ld+json">\n{ "@context": "https://schema.org", '
-                          '"@type": "Article", "headline": %s, "datePublished": %s, '
+                          '"@type": "Article", "headline": %s, %s"datePublished": %s, '
                           '"author": { "@type": "Person", "name": %s }, '
                           '"publisher": { "@type": "Organization", "name": %s }, '
                           '"mainEntityOfPage": %s }\n</script>\n'
-                          % (json.dumps(meta["h1"]), json.dumps(meta["date"]),
+                          % (json.dumps(meta["h1"]), img_part, json.dumps(meta["date"]),
                              json.dumps(meta["author"]), json.dumps(cfg["brand"]),
                              json.dumps(cfg["domain"] + path)))
+            if hero_url:
+                art_schema = ('<meta property="og:image" content="%s">\n' % (cfg["domain"] + hero_url)) + art_schema
             crumbs = (f'<a href="/">Home</a><span class="sep">/</span>'
                       f'<a href="/blog/">Blog</a><span class="sep">/</span>'
                       f'<a href="/blog/{meta["category"]}/">{escape(meta["category_name"])}</a>'
@@ -156,6 +179,7 @@ def build_blog(out, cfg, load_partial, write):
     <span class="section-tag">{escape(meta["category_name"])} &middot; {escape(meta["date"])}</span>
     <h1>{escape(meta["h1"])}</h1>
     <p class="post-byline">By {escape(meta["author"])} &middot; Couch Disposal Plus</p>
+{hero_fig}
     <div class="post-body">
       {html_body}
     </div>
