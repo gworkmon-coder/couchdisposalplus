@@ -1,0 +1,117 @@
+<!-- Mobile navigation: hamburger drawer + click-to-call + sticky action bar.
+     Self-contained (own styles, JS-injected controls) so the same snippet
+     serves generated pages and hand-built static pages. Desktop untouched.
+     Progressive enhancement: without JS the desktop nav simply remains. -->
+<style>
+  @media (max-width: 900px) {
+    html.js-mnav .nav-links { display: none; }
+    html.js-mnav .nav-actions .btn-ghost { display: none; }
+    html.js-mnav .nav-actions { gap: 8px; align-items: center; display: flex; }
+    html.js-mnav .nav-actions .btn-cta { font-size: 13px; padding: 8px 12px; }
+    html.js-mnav body { padding-bottom: 64px; }
+  }
+  @media (min-width: 901px) {
+    .m-call, .m-burger, .m-stickybar { display: none !important; }
+  }
+  .m-call, .m-burger {
+    width: 38px; height: 38px; border: 1.5px solid #111; border-radius: 9px;
+    background: #fff; color: #111; display: inline-flex; align-items: center;
+    justify-content: center; cursor: pointer; flex: 0 0 auto; }
+  .m-call svg, .m-burger svg { width: 19px; height: 19px; }
+  .m-drawer {
+    position: fixed; inset: 0; z-index: 99990; background: #fff; display: none;
+    flex-direction: column; overflow-y: auto; padding: 0 20px 24px; }
+  .m-drawer.open { display: flex; }
+  body.m-locked { overflow: hidden; }
+  .m-drawer-head { display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,.1); }
+  .m-drawer-head .m-logo { font-weight: 800; font-size: 20px; color: #111; text-decoration: none; }
+  .m-drawer-head .m-logo .c { color: #0F6E56; }
+  .m-links { list-style: none; margin: 4px 0 0; padding: 0; }
+  .m-links a { display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 2px; font-size: 17px; color: #111; text-decoration: none;
+    border-bottom: 1px solid rgba(0,0,0,.08); }
+  .m-links a::after { content: "\2192"; color: #9aa3a0; font-size: 15px; }
+  .m-drawer-ctas { display: grid; gap: 10px; padding-top: 18px; }
+  .m-btn { display: flex; align-items: center; justify-content: center; gap: 8px;
+    border: 1.5px solid #111; border-radius: 10px; padding: 14px 0; font-size: 15px;
+    font-weight: 700; color: #111; text-decoration: none; background: #fff;
+    cursor: pointer; font-family: inherit; }
+  .m-btn.lime { background: #d6f24b; }
+  .m-btn svg { width: 16px; height: 16px; }
+  .m-row { display: flex; gap: 10px; }
+  .m-row .m-btn { flex: 1; }
+  .m-track { text-align: center; font-size: 14px; color: #555; padding-top: 12px;
+    text-decoration: none; display: block; }
+  .m-stickybar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 99980;
+    display: flex; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: #fff; border-top: 1.5px solid #111; }
+  .m-stickybar .m-btn { padding: 11px 0; font-size: 14px; }
+  .m-stickybar .m-btn:first-child { flex: 1; }
+  .m-stickybar .m-btn:last-child { flex: 1.5; }
+  body.m-locked .m-stickybar,
+  body:has([data-workmon-modal]) .m-stickybar { display: none; }
+</style>
+<script>
+(function () {
+  if (window.matchMedia && !window.matchMedia("(hover: none)").matches
+      && window.innerWidth > 900) { /* still install; CSS gates visibility */ }
+  document.documentElement.classList.add("js-mnav");
+  var PHONE = "8443110204", PHONE_FMT = "(844) 311-0204", SMS = "6788844738";
+  var ICONS = {
+    phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    burger: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    msg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+  };
+  function el(html) { var d = document.createElement("div"); d.innerHTML = html; return d.firstElementChild; }
+  var actions = document.querySelector(".nav-actions");
+  if (!actions) return;
+
+  var call = el('<a class="m-call" href="tel:' + PHONE + '" aria-label="Call ' + PHONE_FMT + '">' + ICONS.phone + "</a>");
+  var burger = el('<button class="m-burger" aria-label="Open menu" aria-expanded="false">' + ICONS.burger + "</button>");
+  actions.insertBefore(call, actions.firstChild);
+  actions.appendChild(burger);
+
+  var drawer = el('<div class="m-drawer" role="dialog" aria-modal="true" aria-label="Site menu">' +
+    '<div class="m-drawer-head"><a class="m-logo" href="/"><span class="c">C</span>DP</a>' +
+    '<button class="m-burger" data-mclose aria-label="Close menu">' + ICONS.x + "</button></div>" +
+    '<ul class="m-links">' +
+    '<li><a href="/couch-removal/">Removal</a></li>' +
+    '<li><a href="/donation-pickup/">Donation</a></li>' +
+    '<li><a href="/pricing/">Pricing</a></li>' +
+    '<li><a href="/locations/">Locations</a></li>' +
+    '<li><a href="/reviews/">Reviews</a></li>' +
+    '<li><a href="/how-it-works/">How it works</a></li>' +
+    "</ul>" +
+    '<div class="m-drawer-ctas">' +
+    '<button class="m-btn lime" data-workmon-open>Get Instant Price \u2192</button>' +
+    '<div class="m-row">' +
+    '<a class="m-btn" href="tel:' + PHONE + '">' + ICONS.phone + " " + PHONE_FMT + "</a>" +
+    '<a class="m-btn" href="sms:' + SMS + '">' + ICONS.msg + " Text us</a>" +
+    "</div>" +
+    '<a class="m-track" href="/track-order/">Track order</a>' +
+    "</div></div>");
+  document.body.appendChild(drawer);
+
+  var bar = el('<div class="m-stickybar">' +
+    '<a class="m-btn" href="tel:' + PHONE + '">' + ICONS.phone + " Call now</a>" +
+    '<button class="m-btn lime" data-workmon-open>Get Instant Price \u2192</button>' +
+    "</div>");
+  document.body.appendChild(bar);
+
+  function setOpen(open) {
+    drawer.classList.toggle("open", open);
+    document.body.classList.toggle("m-locked", open);
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  burger.addEventListener("click", function () { setOpen(true); });
+  drawer.addEventListener("click", function (e) {
+    if (e.target.closest("[data-mclose]") || e.target.closest("a") ||
+        e.target.closest("[data-workmon-open]")) setOpen(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && drawer.classList.contains("open")) setOpen(false);
+  });
+})();
+</script>

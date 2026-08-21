@@ -70,10 +70,14 @@ def fill(text, **kw):
     return text
 
 
+MOBILENAV = ""
+
+
 def write(path, content):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     if path.endswith(".html"):
         content = content.replace('href="/assets/site.css"', f'href="{CSS_HREF}"')
+        content = content.replace("{{MOBILENAV}}", MOBILENAV)
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
@@ -967,6 +971,8 @@ def build_sitemaps(urls, out, cfg):
 # main
 # --------------------------------------------------------------------------
 def main():
+    global MOBILENAV
+    MOBILENAV = load_partial("mobilenav.html")
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "dist"))
     ap.add_argument("--limit-states", default="", help="comma list, e.g. co,tx")
@@ -1019,6 +1025,8 @@ def main():
         through untouched so their hand-placed embeds stay authoritative."""
         html = open(src, encoding="utf-8").read()
         html = inject_gtm(html)
+        if "m-stickybar" not in html:
+            html = html.replace("</body>", MOBILENAV + "\n</body>", 1)
         if "data-workmon-launcher" not in html and "embed/textus.js" not in html:
             html = html.replace(
                 '<script type="module" src="https://workmon.ai/embed.js"></script>', "")
