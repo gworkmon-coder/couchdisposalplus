@@ -150,7 +150,9 @@ def build_blog(out, cfg, load_partial, write, photos=None):
                                               meta.get("hero_alt", meta["h1"]))
             restored.add(path)
             html_body = md_to_html(md)
-            faq_blocks = re.findall(r"<h3>(.*?)</h3>\n      <p>(.*?)</p>", html_body)
+            faq_blocks = [(q, a) for q, a in
+                          re.findall(r"<h3>(.*?)</h3>\n      <p>(.*?)</p>", html_body)
+                          if q.strip().endswith("?")]
             faq_schema = ""
             if faq_blocks:
                 ents = ",\n    ".join(

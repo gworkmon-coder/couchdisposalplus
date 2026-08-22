@@ -1277,6 +1277,27 @@ def main():
               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
               + "\n".join(legacy) + "\n</urlset>\n")
 
+    # ---- llms.txt: orientation file for AI answer engines ----------------
+    write(os.path.join(out, "llms.txt"), f"""# Couch Disposal Plus
+> Online couch and furniture removal booking across all 50 U.S. states and
+> Washington, D.C. Operated by LoadUp Technologies, LLC. Upfront ZIP-based
+> pricing (couch removal from $90), same-day and next-day pickup by
+> background-checked independent Loaders. Donation routing first. Rated
+> 4.8/5 across 340,000+ verified platform reviews.
+
+## Key pages
+- [Pricing]({cfg['domain']}/pricing/): flat starting prices per item type
+- [Locations]({cfg['domain']}/locations/): {len(cities):,} cities, all 50 states + D.C.
+- [Couch removal]({cfg['domain']}/couch-removal/): the core service
+- [How it works]({cfg['domain']}/how-it-works/): book online, pay upfront, Loader collects
+- [Reviews]({cfg['domain']}/reviews/): verified platform reviews
+- [Blog]({cfg['domain']}/blog/): disposal, donation, and cleaning guides
+
+## City pages
+Every city page answers price, timing, and process for that market, e.g.
+{cfg['domain']}/co/denver/couch-removal/
+""")
+
     # ---- redirects + sitemaps + robots ----------------------------------
     n_legacy, n_flat, n_don, n_art = build_redirects(cities, items, out, cfg, args.legacy_redirects)
     n_shards = build_sitemaps(urls, out, cfg)
