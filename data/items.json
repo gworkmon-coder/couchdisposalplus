@@ -24,6 +24,33 @@
     "faq_disposal": "Couches in donatable condition are routed to local {state} charity partners first. Frames that can't be donated go to material recovery facilities \u2014 hardwood, steel springs, and foam are separated for recycling.",
     "icon": "<rect x=\"14\" y=\"8\" width=\"92\" height=\"26\" rx=\"6\"/><rect x=\"6\" y=\"24\" width=\"14\" height=\"30\" rx=\"6\"/><rect x=\"100\" y=\"24\" width=\"14\" height=\"30\" rx=\"6\"/><rect x=\"14\" y=\"34\" width=\"92\" height=\"20\" rx=\"4\"/><path d=\"M44 36V54M76 36V54M20 54v10M100 54v10\"/>"
   },
+  "donation-pickup": {
+    "slug": "donation-pickup",
+    "label": "Donation Pickup",
+    "service_name": "Couch Donation Pickup",
+    "no_hub": true,
+    "h1_noun": "couch donation pickup",
+    "plural": "donated couches",
+    "price": 90,
+    "badge": "SECOND LIFE",
+    "coverage": "all",
+    "synonyms": [
+      "furniture donation pickup",
+      "donate my couch",
+      "charity couch pickup",
+      "sofa donation service"
+    ],
+    "title_pattern": "{city}, {state_code} Couch Donation Pickup | From ${price}",
+    "desc_card": "We collect your couch and deliver it to local charity partners \u2014 you skip the truck rental and the drop-off line.",
+    "meta": "Couch donation pickup in {city}, {state_code} from ${price}. We collect from inside your home and route donatable couches to local charity partners. Book online with upfront pricing.",
+    "hero_sub": "Give the couch a second life without renting a truck. We pick up from inside your {city} home and route donatable furniture to charity partners first \u2014 anything they can't take is recycled or disposed of responsibly.",
+    "intro": "Donation pickup covers the part charities often can't: getting the couch out of your home and to their door. Book online, and a background-checked local Loader handles the carry, the transport, and the hand-off.",
+    "difficulty": "standard",
+    "faq_cost": "Couch donation pickup in {city} starts at ${price}. You're paying for the in-home pickup, careful transport, and delivery \u2014 the donation itself goes to charity partners at no charge to them. Final pricing depends on your ZIP and the access details you provide at booking.",
+    "faq_special": "Have the couch reasonably clean and confirm it meets donation condition \u2014 no major stains, odors, rips, or broken frames. If a charity can't accept it on condition grounds, your Loader will recycle or dispose of it responsibly instead, so the pickup never wastes your time either way.",
+    "faq_disposal": "Donatable couches from {city} go to local charity partners first \u2014 thrift programs, furniture banks, and shelters in and around {state}. Couches that don't meet donation condition are routed to recycling where facilities allow, with landfill as the last resort.",
+    "icon": "<path d=\"M26 30h68v34H26z\"/><path d=\"M26 30l8-14h52l8 14\"/><path d=\"M60 16v14\"/><path d=\"M60 54c-6-7-15-4-15 3 0 6 9 10 15 14 6-4 15-8 15-14 0-7-9-10-15-3z\" fill=\"none\"/>"
+  },
   "sectional": {
     "slug": "sectional-removal",
     "label": "Sectional",

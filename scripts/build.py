@@ -284,13 +284,14 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     n_tiles = (10, 12)[page_seed % 2]
     facts_first = (page_seed >> 3) % 2 == 0
     url = f"{d}/{st}/{slug}/{item['slug']}/"
+    svc = item.get("service_name", f"{item['label']} Removal")
     price = price_for(st, slug, item_key, items)
 
     ctx = dict(city=cname, state=sname, price=price, state_code=st.upper())
 
     title = fill(item["title_pattern"], **ctx)
     if len(title) > 60:
-        title = f"{cname}, {st.upper()} {item['label']} Removal | ${price}"
+        title = f"{cname}, {st.upper()} {svc} | ${price}"
     meta = fill(item["meta"], **ctx)
     hero_sub = fill(item["hero_sub"], **ctx)
     intro = fill(item["intro"], **ctx)
@@ -373,7 +374,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
     # AEO: a single lifted-answer paragraph, first substantive text on the page
     direct_answer = (
-        f"{item['label']} removal in {cname}, {st.upper()} starts at ${price}. "
+        f"{svc} in {cname}, {st.upper()} starts at ${price}. "
         f"{cfg['brand']} prices every pickup online up front \u2014 no in-home quote. "
         f"Standard stair access and disassembly are included when noted at booking. Same-day pickup is available "
         f"when you book before noon; next-day is standard. Donatable {item['plural']} are "
@@ -381,7 +382,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
     # ---- schema -----------------------------------------------------------
     offers = ",\n      ".join(
-        f'{{ "@type": "Offer", "itemOffered": {{ "@type": "Service", "name": "{v["label"]} Removal {cname}" }}, '
+        f'{{ "@type": "Offer", "itemOffered": {{ "@type": "Service", "name": "{v.get("service_name", v["label"] + " Removal")} {cname}" }}, '
         f'"price": "{price_for(st, slug, k, items)}", "priceCurrency": "USD" }}'
         for k, v in [(item_key, item)] + siblings[:3])
 
@@ -483,8 +484,8 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   "@context": "https://schema.org",
   "@type": "Service",
   "@id": "{url}#service",
-  "serviceType": "{item['label']} Removal",
-  "name": "{item['label']} Removal in {cname}, {st.upper()}",
+  "serviceType": "{svc}",
+  "name": "{svc} in {cname}, {st.upper()}",
   "provider": {{ "@id": "{d}/#organization" }},
   "areaServed": [{area_served}],
   "hasOfferCatalog": {{ "@id": "{url}#localbusiness" }},
@@ -548,7 +549,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     {{ "@type": "ListItem", "position": 2, "name": "Locations", "item": "{d}/locations/" }},
     {{ "@type": "ListItem", "position": 3, "name": "{sname}", "item": "{d}/{st}/" }},
     {{ "@type": "ListItem", "position": 4, "name": "{cname}", "item": "{d}/{st}/{slug}/" }},
-    {{ "@type": "ListItem", "position": 5, "name": "{cname} {item['label']} Removal", "item": "{url}" }}
+    {{ "@type": "ListItem", "position": 5, "name": "{cname} {svc}", "item": "{url}" }}
   ]
 }}
 </script>
@@ -824,7 +825,7 @@ def build_redirects(cities, items, out, cfg, legacy_path):
     # ---- 1. legacy service/state/city -> new state/city/item -------------
     legacy_map = {
         "couch-disposal": "couch-removal",
-        "couch-donation-pickup": None,   # no city-level donation template yet -> couch page
+        "couch-donation-pickup": "donation-pickup",
         "mattress-disposal": None,        # no new page yet -> city couch page
         "furniture-disposal": None,
         "appliance-disposal": None,
@@ -856,7 +857,7 @@ def build_redirects(cities, items, out, cfg, legacy_path):
                      ("mattress-disposal", "couch-removal"),
                      ("furniture-disposal", "couch-removal"),
                      ("recliner-disposal", "recliner-removal"),
-                     ("couch-donation-pickup", "couch-removal")]:
+                     ("couch-donation-pickup", "donation-pickup")]:
         lines.append(rule(f"/{old}/", f"/{new}/" if new in built else "/couch-removal/"))
     lines.append("")
 
@@ -895,7 +896,7 @@ def build_redirects(cities, items, out, cfg, legacy_path):
             if len(p) >= 2:
                 m = pat.match(p[0])
                 if m and (m.group(2), m.group(1)) in valid:
-                    lines.append(rule(p[0], f"/{m.group(2)}/{m.group(1)}/couch-removal/"))
+                    lines.append(rule(p[0], f"/{m.group(2)}/{m.group(1)}/donation-pickup/"))
                     n_don += 1
     lines.append("")
 
@@ -1160,6 +1161,8 @@ def main():
 
     # ---- national item hubs ---------------------------------------------
     for key, item in items.items():
+        if item.get("no_hub"):
+            continue
         tier1 = sorted([c for c in cities if c["tier"] == 1 and covered(c, item)],
                        key=lambda x: -x["population"])[:200]
         groups = [(f"Top cities for {item['h1_noun']}",

@@ -300,6 +300,9 @@ ITEM_MARKET = {
  ("recliner","light"): "Medical lift chairs are a common {city} pickup \u2014 note the battery backup at booking so it's pulled and recycled separately from the frame.",
  ("futon","metro"): "Futon frames are the easiest piece to get out of a tight {city} apartment \u2014 the frame breaks down in minutes and the mattress folds. Both go in one pickup at one price.",
  ("futon","suburban"): "A {city} futon pickup covers frame and mattress together. Wood frames are donation candidates when hardware is intact; cotton-fill mattresses route to material recovery.",
+ ("donation-pickup","metro"): "Donation logistics are the reason good couches end up curbside in {city}: charities that want the furniture often can't collect from a walk-up or coordinate a building's freight elevator. That's the exact gap this service closes — the Loader handles the building, the charity receives the couch.",
+ ("donation-pickup","suburban"): "Most {city} donation pickups are single-family homes where the obstacle isn't access — it's the truck. Charities' own pickup routes book out weeks ahead; a scheduled Loader pickup moves the couch on your timeline and still lands it with a local charity partner.",
+ ("donation-pickup","light"): "Charity pickup trucks rarely route through {city}, which strands donatable furniture in perfectly good condition. Regional Loaders bridge that distance — your couch rides to the nearest partner organization that can actually take it.",
  ("futon","light"): "Futons on {city} routes travel disassembled \u2014 the frame packs flat, which makes this one of the easiest items to bundle with a larger regional pickup.",
 }
 
