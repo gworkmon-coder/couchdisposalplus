@@ -224,7 +224,7 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
         (f"How much does {item['h1_noun']} cost in {cname}?",
          item["faq_cost"].replace("{city}", cname).replace("{price}", str(price or item["price"]))),
         (f"How fast can you collect my {label} in {cname}?",
-         f"Same-day pickup is available across {cname} for bookings placed before noon. Next-day is "
+         f"Same-day pickup is available across {cname} for bookings placed before 2PM EST. Next-day is "
          f"the default. Average booking-to-pickup time in {cname} is about 24 hours."),
         (f"Do I need to prepare the {label} before pickup?",
          item["faq_special"].replace("{city}", cname)),

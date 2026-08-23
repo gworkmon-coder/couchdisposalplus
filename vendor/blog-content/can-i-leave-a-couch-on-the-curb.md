@@ -54,4 +54,4 @@ Almost never. Standard collection trucks aren't equipped for furniture. Couches 
 
 ### What's the fastest way to get rid of a couch without using the curb?
 
-Booked removal is usually the fastest legal option — same-day pickup is often available when you [book before noon](/couch-removal/), and the couch goes from your living room to the truck without touching the sidewalk.
+Booked removal is usually the fastest legal option — same-day pickup is often available when you [book before 2PM EST](/couch-removal/), and the couch goes from your living room to the truck without touching the sidewalk.

@@ -377,7 +377,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
         f"{svc} in {cname}, {st.upper()} starts at ${price}. "
         f"{cfg['brand']} prices every pickup online up front \u2014 no in-home quote. "
         f"Standard stair access and disassembly are included when noted at booking. Same-day pickup is available "
-        f"when you book before noon; next-day is standard. Donatable {item['plural']} are "
+        f"when you book before 2PM EST; next-day is standard. Donatable {item['plural']} are "
         f"routed to {sname} charity partners first.")
 
     # ---- schema -----------------------------------------------------------
@@ -515,7 +515,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     {{ "@type": "HowToStep", "position": 1, "name": "Get an instant {cname} price",
        "text": "Enter your {cname}-area ZIP and select the items going. The guaranteed price displays immediately \u2014 no in-home quote.", "url": "{url}#step1" }},
     {{ "@type": "HowToStep", "position": 2, "name": "Pick a pickup window",
-       "text": "Same-day if booked before noon, next-day by default. Choose a 4-hour window and confirmation is sent immediately.", "url": "{url}#step2" }},
+       "text": "Same-day if booked before 2PM EST, next-day by default. Choose a 4-hour window and confirmation is sent immediately.", "url": "{url}#step2" }},
     {{ "@type": "HowToStep", "position": 3, "name": "Pay upfront online",
        "text": "Your card is charged at booking. The price is guaranteed for the scope you book; on-site changes are priced per our Terms.", "url": "{url}#step3" }},
     {{ "@type": "HowToStep", "position": 4, "name": "A {cname} Loader collects the {item['label'].lower()}",
@@ -667,7 +667,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
     <div class="how-steps">
       <div class="how-step"><span class="step-num"><em>01</em></span><h3>Get instant {escape(cname)} price</h3><p>Enter your {escape(cname)}-area ZIP and pick the items going. Your guaranteed price displays immediately.</p></div>
-      <div class="how-step"><span class="step-num"><em>02</em></span><h3>Pick a pickup window</h3><p>Same-day if booked before noon, next-day default. Choose a 4-hour window. Confirmation sent immediately.</p></div>
+      <div class="how-step"><span class="step-num"><em>02</em></span><h3>Pick a pickup window</h3><p>Same-day if booked before 2PM EST, next-day default. Choose a 4-hour window. Confirmation sent immediately.</p></div>
       <div class="how-step"><span class="step-num"><em>03</em></span><h3>Pay upfront online</h3><p>Card charged at booking. Your price is guaranteed for the scope you book &mdash; if items or access change on site, adjustments follow our Terms.</p></div>
       <div class="how-step"><span class="step-num"><em>04</em></span><h3>{escape(cname)} Loader arrives</h3><p>An independent local Loader arrives in window, lifts the {escape(item['label'].lower())}, and routes it through local partners.</p></div>
     </div>
