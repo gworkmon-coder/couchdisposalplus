@@ -1016,8 +1016,11 @@ def main():
         "\n<!-- Workmon slideout launcher -->\n"
         '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>\n'
         '<script type="module" src="https://workmon.ai/embed.js" async></script>\n\n'
-        "<!-- Workmon initiate-SMS widget -->\n"
-        '<script src="https://workmon.ai/embed/textus.js" data-brand="loadup" async></script>\n'
+        "<!-- Workmon initiate-SMS widget: desktop only -->\n"
+        "<script>if(window.matchMedia('(min-width: 901px)').matches){"
+        "var _t=document.createElement('script');_t.src='https://workmon.ai/embed/textus.js';"
+        "_t.setAttribute('data-brand','loadup');_t.async=true;document.body.appendChild(_t);}"
+        "</script>\n"
         "</body>")
 
     def copy_static(src, dst):

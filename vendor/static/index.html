@@ -802,7 +802,17 @@
 <script type="module" src="https://workmon.ai/embed.js" async></script>
 
 <!-- Workmon initiate-SMS widget -->
-<script src="https://workmon.ai/embed/textus.js" data-brand="loadup" async></script>
+<!-- Workmon initiate-SMS widget: desktop only. On mobile it overlaps the
+     booking flow's controls, so the script is never loaded below 901px. -->
+<script>
+  if (window.matchMedia('(min-width: 901px)').matches) {
+    var _t = document.createElement('script');
+    _t.src = 'https://workmon.ai/embed/textus.js';
+    _t.setAttribute('data-brand', 'loadup');
+    _t.async = true;
+    document.body.appendChild(_t);
+  }
+</script>
 
 </body>
 </html>
