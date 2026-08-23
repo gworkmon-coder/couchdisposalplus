@@ -57,8 +57,7 @@
     align-items: center; justify-content: center; }
   .bk-x svg { width: 17px; height: 17px; }
   .bk-body { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 320px; }
-  .bk-foot { padding: 9px 16px; border-top: 1px solid rgba(0,0,0,.08); text-align: center; }
-  .bk-foot a { font-size: 12.5px; color: #555; }
+  body.bk-open [data-workmon-launcher] { visibility: hidden !important; }
   @media (max-width: 640px) {
     .bk-overlay { padding: 0; }
     .bk-card { max-width: none; height: 100%; max-height: none; border-radius: 0; border: 0; box-shadow: none; }
@@ -131,7 +130,6 @@
       '<div class="bk-head"><strong>Book your pickup</strong>' +
       '<button class="bk-x" data-bkclose aria-label="Close booking">' + ICONS.x + '</button></div>' +
       '<div class="bk-body"><div data-workmon-booking data-tenant="loadup" data-brand="cdp"></div></div>' +
-      '<div class="bk-foot"><a href="/book-online/">Prefer a full page? Open the booking page \u2192</a></div>' +
       '</div></div>');
     document.body.appendChild(bkOverlay);
     bkOverlay.addEventListener('click', function (e) {
@@ -147,11 +145,33 @@
       }
     }, 1800);
   }
+  var bkHidden = [];
+  function bkSweepWidgets(hide) {
+    if (hide) {
+      bkHidden = [];
+      var kids = document.body.children;
+      for (var i = 0; i < kids.length; i++) {
+        var n = kids[i];
+        if (n === bkOverlay || n.classList.contains('m-drawer') ||
+            n.hasAttribute('data-workmon-modal') || n.tagName === 'SCRIPT') continue;
+        var cs = window.getComputedStyle(n);
+        if (cs.position === 'fixed' && cs.visibility !== 'hidden') {
+          n.style.visibility = 'hidden';
+          bkHidden.push(n);
+        }
+      }
+    } else {
+      for (var j = 0; j < bkHidden.length; j++) bkHidden[j].style.visibility = '';
+      bkHidden = [];
+    }
+  }
   function bkSetOpen(open) {
     if (open && !bkOverlay) bkBuild();
     if (!bkOverlay) return;
     bkOverlay.classList.toggle('open', open);
     document.body.classList.toggle('m-locked', open);
+    document.body.classList.toggle('bk-open', open);
+    bkSweepWidgets(open);
   }
   document.addEventListener('click', function (e) {
     var b = e.target && e.target.closest && e.target.closest('[data-cdp-book]');
