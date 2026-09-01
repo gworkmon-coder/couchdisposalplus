@@ -40,37 +40,38 @@
   })();
 </script>
 
-<script>
-  // Workmon drawer guard. Their embed can stack a new drawer on each CTA
-  // click, which is why closing took several X clicks. Two defenses:
-  //  1. capture-phase click guard: if a drawer is already open, swallow the
-  //     duplicate open so a second/third instance never stacks
-  //  2. Escape key force-closes any drawer and restores page scroll
-  // This is a shim; the underlying stacking is Workmon's to fix.
-  (function () {
-    document.addEventListener('click', function (e) {
-      var btn = e.target && e.target.closest && e.target.closest('[data-workmon-open]');
-      if (!btn) return;
-      if (document.querySelector('[data-workmon-modal]')) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-      }
-    }, true);
-    document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape') return;
-      var els = document.querySelectorAll('[data-workmon-modal]');
-      if (!els.length) return;
-      for (var i = 0; i < els.length; i++) {
-        els[i].parentNode && els[i].parentNode.removeChild(els[i]);
-      }
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-    });
-  })();
-</script>
 
-<!-- Workmon slideout launcher: every [data-workmon-open] button opens it -->
-<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>
+<!-- Workmon wb1 chat booking widget (offscreen dock; CTAs forward to it) -->
+<div style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden">
+  <div data-workmon-wb1 data-tenant="loadup" data-brand="cdp" data-button="Book a pickup"></div>
+</div>
+<script>
+/* Workmon wb1 forwarder: routes every [data-workmon-open] CTA to the wb1
+   widget's own rendered trigger. Retries ~2.5s while the widget mounts,
+   then falls back to the booking page so no click ever dead-ends. */
+(function(){
+  function findTrigger(){
+    var host=document.querySelector('[data-workmon-wb1]');
+    if(!host)return null;
+    var b=host.querySelector('button,[role="button"],a');
+    if(!b&&host.shadowRoot)b=host.shadowRoot.querySelector('button,[role="button"],a');
+    if(!b){var w=host.firstElementChild;if(w&&w.shadowRoot)b=w.shadowRoot.querySelector('button,[role="button"],a');}
+    return b;
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-workmon-open]');
+    if(!t)return;
+    e.preventDefault();e.stopImmediatePropagation();
+    var b=findTrigger();
+    if(b)return b.click();
+    var tries=0,iv=setInterval(function(){
+      var bb=findTrigger();tries++;
+      if(bb){clearInterval(iv);bb.click();}
+      else if(tries>16){clearInterval(iv);window.location.href='/book-online/';}
+    },150);
+  },true);
+})();
+</script>
 <script type="module" src="https://workmon.ai/embed.js" async></script>
 
 <!-- Workmon initiate-SMS widget: desktop only. On mobile it overlaps the

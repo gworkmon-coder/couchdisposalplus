@@ -1020,10 +1020,17 @@ def main():
     # carry over hand-built core pages from the existing deploy
     CORE = ["about", "book-online", "contact", "donation-pickup", "how-it-works",
             "pricing", "privacy", "reviews", "terms", "track-order"]
-    WM_GUARD = (
-        '<script>\n  // Workmon drawer guard. Their embed can stack a new drawer on each CTA\n  // click, which is why closing took several X clicks. Two defenses:\n  //  1. capture-phase click guard: if a drawer is already open, swallow the\n  //     duplicate open so a second/third instance never stacks\n  //  2. Escape key force-closes any drawer and restores page scroll\n  // This is a shim; the underlying stacking is Workmon\'s to fix.\n  (function () {\n    document.addEventListener(\'click\', function (e) {\n      var btn = e.target && e.target.closest && e.target.closest(\'[data-workmon-open]\');\n      if (!btn) return;\n      if (document.querySelector(\'[data-workmon-modal]\')) {\n        e.preventDefault();\n        e.stopImmediatePropagation();\n      }\n    }, true);\n    document.addEventListener(\'keydown\', function (e) {\n      if (e.key !== \'Escape\') return;\n      var els = document.querySelectorAll(\'[data-workmon-modal]\');\n      if (!els.length) return;\n      for (var i = 0; i < els.length; i++) {\n        els[i].parentNode && els[i].parentNode.removeChild(els[i]);\n      }\n      document.documentElement.style.overflow = \'\';\n      document.body.style.overflow = \'\';\n    });\n  })();\n</script>\n')
-    WM_LAUNCHER = ('<!-- Workmon slideout launcher -->\n'
-        '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp"></div>\n')
+    WM_WB1 = ('<!-- Workmon wb1 chat booking widget (offscreen dock) -->\n'
+        '<div style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden">\n'
+        '  <div data-workmon-wb1 data-tenant="loadup" data-brand="cdp" data-button="Book a pickup"></div>\n'
+        '</div>\n')
+    WM_FORWARDER = r"""<script>
+/* Workmon wb1 forwarder */
+(function(){
+function findTrigger(){var host=document.querySelector('[data-workmon-wb1]');if(!host)return null;var b=host.querySelector('button,[role="button"],a');if(!b&&host.shadowRoot)b=host.shadowRoot.querySelector('button,[role="button"],a');if(!b){var w=host.firstElementChild;if(w&&w.shadowRoot)b=w.shadowRoot.querySelector('button,[role="button"],a');}return b;}
+document.addEventListener('click',function(e){var t=e.target.closest('[data-workmon-open]');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var b=findTrigger();if(b)return b.click();var tries=0,iv=setInterval(function(){var bb=findTrigger();tries++;if(bb){clearInterval(iv);bb.click();}else if(tries>16){clearInterval(iv);window.location.href='/book-online/';}},150);},true);})();
+</script>
+"""
     WM_EMBED = '<script type="module" src="https://workmon.ai/embed.js" async></script>\n'
     WM_TEXTUS = ("<!-- Workmon initiate-SMS widget: desktop only -->\n"
         "<script>if(window.matchMedia('(min-width: 901px)').matches){"
@@ -1043,10 +1050,10 @@ def main():
         # markup it would inject -- never a bare attribute-name substring,
         # which CSS selectors elsewhere on the page can contain.
         pieces = []
-        if "Workmon drawer guard" not in html:
-            pieces.append(WM_GUARD)
-        if "<div data-workmon-launcher" not in html:
-            pieces.append(WM_LAUNCHER)
+        if "<div data-workmon-wb1" not in html:
+            pieces.append(WM_WB1)
+        if "Workmon wb1 forwarder" not in html:
+            pieces.append(WM_FORWARDER)
         if "workmon.ai/embed.js" not in html:
             pieces.append(WM_EMBED)
         if "workmon.ai/embed/textus.js" not in html:
