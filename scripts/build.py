@@ -78,6 +78,12 @@ def write(path, content):
     if path.endswith(".html"):
         content = content.replace('href="/assets/site.css"', f'href="{CSS_HREF}"')
         content = content.replace("{{MOBILENAV}}", MOBILENAV)
+        if 'rel="icon"' not in content and "</head>" in content:
+            content = content.replace(
+                "</head>",
+                '<link rel="icon" href="/favicon.ico" sizes="48x48">\n'
+                '<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
+                '<link rel="apple-touch-icon" href="/apple-touch-icon.png">\n</head>', 1)
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
@@ -427,7 +433,9 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.t%7Bfont-family:'Inter Tight',-apple-system,system-ui,sans-serif;font-weight:800;font-size:32px;letter-spacing:-2.2px%7D%3C/style%3E%3Ctext x='4' y='44' class='t' fill='%232db8b3'%3EC%3C/text%3E%3Ctext x='22' y='44' class='t' fill='%230a0a0a'%3EDP%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <script type="application/ld+json">
 {{
@@ -436,6 +444,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   "@id": "{d}/#organization",
   "name": "{cfg['brand']}",
   "url": "{d}/",
+  "logo": "{d}/icon-512.png",
   "telephone": "{cfg['phone_e164']}",
   "parentOrganization": {{ "@type": "Organization", "name": "{cfg['parent']}", "url": "https://goloadup.com" }},
   "aggregateRating": {{ "@type": "AggregateRating", "ratingValue": "{cfg['rating']}", "reviewCount": "{cfg['reviews_count']}", "bestRating": "5" }}
@@ -1291,6 +1300,11 @@ def main():
               '<?xml version="1.0" encoding="UTF-8"?>\n'
               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
               + "\n".join(legacy) + "\n</urlset>\n")
+
+    # ---- favicon set: real crawlable files (Google ignores data URIs) ----
+    brand = os.path.join(ROOT, "vendor", "brand")
+    for f in os.listdir(brand):
+        shutil.copy2(os.path.join(brand, f), os.path.join(out, f))
 
     # ---- llms.txt: orientation file for AI answer engines ----------------
     write(os.path.join(out, "llms.txt"), f"""# Couch Disposal Plus
