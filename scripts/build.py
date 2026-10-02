@@ -1269,6 +1269,93 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
             urls.append((pst["path"], "0.8"))
     print(f"blog               : {n_restored} restored static, {n_known} listed (rest proxy to WordPress)")
 
+    # ---- central FAQ page + Become a Loader page --------------------------
+    faqs = [
+        ("How much does couch removal cost?",
+         "Standard couches start at $90, loveseats at $75, sleepers at $110, and sectionals at $150. "
+         "Enter your ZIP on the pricing page for your exact number \u2014 the price you see at booking "
+         "is the price you're charged."),
+        ("Do I pay before or after the pickup?",
+         "At booking. Your card is charged online when you book, and the price is guaranteed for the "
+         "scope you describe. If items or access turn out different on site, adjustments follow our Terms."),
+        ("How fast can you pick up?",
+         "Same-day pickup is available in most cities when you book before 2PM EST; next-day is the "
+         "standard everywhere we operate."),
+        ("Do I need to be home for the pickup?",
+         "Not necessarily. Many pickups are completed from garages, porches, or with building access "
+         "arranged at booking. In-home pickups need someone to let the Loader in."),
+        ("Do you take couches from upstairs apartments?",
+         "Yes. Walk-ups, basements, and tight stairwells are part of the job. Standard stair access "
+         "noted at booking is included in your quoted price."),
+        ("Who actually picks up my couch?",
+         "A background-checked independent local Loader dispatched through the LoadUp platform, which "
+         "has operated nationwide since 2014. You'll receive confirmation and updates by email and text."),
+        ("Should I tip the Loaders?",
+         "Tipping is never required or expected. If a crew impresses you, tips are welcome and go "
+         "entirely to the Loaders, but nothing about your service depends on it."),
+        ("Can I reschedule or cancel?",
+         "Yes \u2014 through the confirmation link in your booking email or by contacting support. "
+         "Timing and any fees are governed by the Terms of Service; the earlier you change, the simpler it is."),
+        ("What happens to my couch after pickup?",
+         "Donatable couches are offered to local charity partners first. What can't be donated is "
+         "routed to recycling where facilities allow, with licensed disposal as the last resort."),
+        ("What won't you take?",
+         "Hazardous materials and items outside furniture and household goods. If a couch has mold or "
+         "pest issues, disclose it at booking \u2014 it changes handling, not necessarily eligibility."),
+        ("Is my couch eligible for donation?",
+         "Clean, intact, odor-free couches with working mechanisms generally qualify. Stains, rips, "
+         "moisture damage, or pet odor usually disqualify \u2014 but booking donation pickup never "
+         "wastes the trip: ineligible items are recycled or disposed of responsibly instead."),
+        ("Do you service my city?",
+         "We operate in 4,600+ cities across all 50 states and Washington, D.C. Enter your ZIP in the "
+         "booking flow or browse the locations directory to confirm your area."),
+    ]
+    faq_items = "\n".join(
+        f'''      <div class="faq-item"><button class="faq-q" aria-expanded="false">{escape(q)}<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>{escape(a)}</p></div></div>''' for q, a in faqs)
+    faq_schema = ('<script type="application/ld+json">\n{ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [\n'
+                  + ",\n".join('{ "@type": "Question", "name": %s, "acceptedAnswer": { "@type": "Answer", "text": %s } }'
+                                % (json.dumps(q), json.dumps(a)) for q, a in faqs)
+                  + '\n] }\n</script>\n')
+    faq_body = f'''<section class="hero"><div class="wrap">
+    <h1>Frequently asked questions</h1>
+    <p class="hero-sub">Booking, pricing, pickup day, and what happens to the couch afterward. Can't find it here? <a href="/contact/">Contact us</a>.</p>
+  </div></section>
+<section class="section"><div class="wrap" style="max-width:860px">
+    <div class="faq-list">
+{faq_items}
+    </div>
+    <div class="post-cta" style="margin-top:40px"><h2>Ready to book?</h2>
+      <p>Upfront price by ZIP. Same-day pickup in most cities before 2PM EST.</p>
+      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button></div>
+  </div></section>'''
+    write(os.path.join(out, "faq", "index.html"),
+          make_blog.shell(cfg, load_partial, f"FAQ | Couch Removal Questions Answered | {cfg['brand']}",
+                          "Answers on couch removal pricing, same-day pickup, stairs, tipping, donation eligibility, and what happens to your couch after pickup.",
+                          "/faq/", faq_body,
+                          '<a href="/">Home</a><span class="sep">/</span><span class="current">FAQ</span>',
+                          faq_schema))
+    urls.append(("/faq/", "0.6"))
+
+    loader_body = '''<section class="hero"><div class="wrap">
+    <h1>Become a Loader</h1>
+    <p class="hero-sub">Loaders are the independent local pros who make every pickup on this site happen &mdash; background-checked, equipped with their own truck, and paid per completed job through the LoadUp platform.</p>
+  </div></section>
+<section class="section"><div class="wrap" style="max-width:800px">
+    <h2>How it works</h2>
+    <p>LoadUp Technologies, our parent platform, dispatches furniture pickups to independent Loaders in 4,600+ cities. You claim jobs that fit your schedule and route, handle the pickup and the responsible disposal or donation drop-off, and get paid per job &mdash; no shifts, no boss, no storefront.</p>
+    <h2>What you need</h2>
+    <p>A pickup truck, trailer, or cargo van; the ability to pass a background check; a smartphone for the Loader app; and the work ethic to treat someone's home with care. Two-person crews handle most furniture; solo Loaders take the jobs sized for one.</p>
+    <h2>Apply</h2>
+    <p>Applications run through the LoadUp platform. Email <a href="mailto:loaders@goloadup.com">loaders@goloadup.com</a> with your name, city, and vehicle, or apply at <a href="https://goloadup.com" rel="noopener">goloadup.com</a>. Most markets are actively recruiting.</p>
+  </div></section>'''
+    write(os.path.join(out, "become-a-loader", "index.html"),
+          make_blog.shell(cfg, load_partial, f"Become a Loader | Drive & Earn with {cfg['brand']}",
+                          "Join the LoadUp platform as an independent Loader: claim furniture pickups in your area, set your own schedule, get paid per completed job.",
+                          "/become-a-loader/", loader_body,
+                          '<a href="/">Home</a><span class="sep">/</span><span class="current">Become a Loader</span>'))
+    urls.append(("/become-a-loader/", "0.4"))
+
     # ---- human-readable /sitemap/ from the real route registry -----------
     st_counts = {st: len(cs) for st, cs in by_state.items()}
     groups = [("Core pages",
