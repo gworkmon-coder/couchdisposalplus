@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make_blog.py — blog section for the new build.
+make_blog.py, blog section for the new build.
 
 Two sources of truth:
   1. vendor/blog-content/*.md      posts restored verbatim from the live

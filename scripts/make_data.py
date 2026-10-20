@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make_data.py — reconstruct the city/state dataset for Couch Disposal Plus.
+make_data.py, reconstruct the city/state dataset for Couch Disposal Plus.
 
 Sources:
   1. deploy/_redirects   -> the canonical city universe (1,869 cities / 51 states)

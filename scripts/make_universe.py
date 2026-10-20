@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make_universe.py — build the full city universe for all 50 states + DC.
+make_universe.py, build the full city universe for all 50 states + DC.
 
 Union of two sources:
   A. data/cities.csv        the 1,869 slugs already in production redirects.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-validate.py — pre-deploy checks on a built dist/.
+validate.py, pre-deploy checks on a built dist/.
 
   1. internal link integrity (every href resolves to a file or a redirect rule)
   2. JSON-LD blocks parse as valid JSON

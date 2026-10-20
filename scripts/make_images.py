@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-make_images.py — process brand photography into responsive web assets.
+make_images.py, process brand photography into responsive web assets.
 
 Source photos are 1024px wide, so 1024 is the ceiling. Emits WebP (primary) and
 JPEG (fallback) at 480 / 768 / 1024 into dist/assets/img/, and writes

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-build.py — Couch Disposal Plus static site generator (reconstructed).
+build.py, Couch Disposal Plus static site generator (reconstructed).
 
 Emits, into dist/:
   /{state}/{city}/{item}-removal/   city x item pages
@@ -221,7 +221,7 @@ def render_photo(key, cname, item_label, eager=False, sizes="(max-width: 780px) 
 # --------------------------------------------------------------------------
 DENSITY_BANDS = [
     (750000, "major-metro",
-     "{city} is a major metro, and the constraint here is almost never the truck \u2014 it's the "
+     "{city} is a major metro, and the constraint here is almost never the truck, it's the "
      "building. High-rise freight elevators, loading-dock windows, and permit-parking blocks are "
      "the things that decide whether a pickup runs on time. Flag elevator booking at checkout and "
      "the assigned Loader schedules around it."),
@@ -258,7 +258,7 @@ def service_area_copy(city, states):
         tail = ", ".join(names[:-1]) + " and " + names[-1]
     return (f"The {city['city_name']} service area also covers {tail}. Pickups in these "
             f"communities are routed through the same {city['city_name']} Loader pool, at the "
-            f"same price \u2014 there is no out-of-area surcharge.")
+            f"same price, there is no out-of-area surcharge.")
 
 
 def nearest_larger(city, nearby_pool):
@@ -381,7 +381,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     # AEO: a single lifted-answer paragraph, first substantive text on the page
     direct_answer = (
         f"{svc} in {cname}, {st.upper()} starts at ${price}. "
-        f"{cfg['brand']} prices every pickup online up front \u2014 no in-home quote. "
+        f"{cfg['brand']} prices every pickup online up front, no in-home quote. "
         f"Standard stair access and disassembly are included when noted at booking. Same-day pickup is available "
         f"when you book before 2PM EST; next-day is standard. Donatable {item['plural']} are "
         f"routed to {sname} charity partners first.")
@@ -456,7 +456,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "@id": "{url}#localbusiness",
-  "name": "{cfg['brand']} \\u2014 {cname}",
+  "name": "{cfg['brand']}, {cname}",
   "description": "Online {item['h1_noun']} platform serving {cname}, {sname}. Upfront pricing, same-day pickup, donation routing first.",
   "url": "{url}",
   "telephone": "{cfg['phone_e164']}",
@@ -522,13 +522,13 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   "estimatedCost": {{ "@type": "MonetaryAmount", "currency": "USD", "value": "{price}" }},
   "step": [
     {{ "@type": "HowToStep", "position": 1, "name": "Get an instant {cname} price",
-       "text": "Enter your {cname}-area ZIP and select the items going. The guaranteed price displays immediately \u2014 no in-home quote.", "url": "{url}#step1" }},
+       "text": "Enter your {cname}-area ZIP and select the items going. The guaranteed price displays immediately, no in-home quote.", "url": "{url}#step1" }},
     {{ "@type": "HowToStep", "position": 2, "name": "Pick a pickup window",
        "text": "Same-day if booked before 2PM EST, next-day by default. Choose a 4-hour window and confirmation is sent immediately.", "url": "{url}#step2" }},
     {{ "@type": "HowToStep", "position": 3, "name": "Pay upfront online",
        "text": "Your card is charged at booking. The price is guaranteed for the scope you book; on-site changes are priced per our Terms.", "url": "{url}#step3" }},
     {{ "@type": "HowToStep", "position": 4, "name": "A {cname} Loader collects the {item['label'].lower()}",
-       "text": "An independent local Loader arrives in the window, handles stairs and disassembly, and routes the item to {sname} donation or recycling partners.", "url": "{url}#step4" }}
+       "text": "A background-checked local Loader arrives in the window, handles stairs and disassembly, and routes the item to {sname} donation or recycling partners.", "url": "{url}#step4" }}
   ]
 }}
 </script>
@@ -605,7 +605,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   <div class="wrap powered-inner">
     <span class="powered-mark"></span>
     <span class="powered-copy">
-      Powered by <strong>LoadUp Technologies</strong> &mdash; connecting customers with independent local Loaders. Operating since 2014.
+      Powered by <strong>LoadUp Technologies</strong>, connecting customers with background-checked local Loaders. Operating since 2014.
     </span>
   </div>
 </div>
@@ -671,14 +671,14 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     <div class="section-head">
       <span class="section-tag">How it works &middot; {escape(cname)}</span>
       <h2>Booked in 3 minutes. <em>Gone in a day.</em></h2>
-      <p class="section-sub">Same flow as anywhere on the platform &mdash; with {escape(cname)}-area Loaders handling the pickup and routing.</p>
+      <p class="section-sub">Same flow as anywhere on the platform, with {escape(cname)}-area Loaders handling the pickup and routing.</p>
     </div>
 
     <div class="how-steps">
       <div class="how-step"><span class="step-num"><em>01</em></span><h3>Get instant {escape(cname)} price</h3><p>Enter your {escape(cname)}-area ZIP and pick the items going. Your guaranteed price displays immediately.</p></div>
       <div class="how-step"><span class="step-num"><em>02</em></span><h3>Pick a pickup window</h3><p>Same-day if booked before 2PM EST, next-day default. Choose a 4-hour window. Confirmation sent immediately.</p></div>
-      <div class="how-step"><span class="step-num"><em>03</em></span><h3>Pay upfront online</h3><p>Card charged at booking. Your price is guaranteed for the scope you book &mdash; if items or access change on site, adjustments follow our Terms.</p></div>
-      <div class="how-step"><span class="step-num"><em>04</em></span><h3>{escape(cname)} Loader arrives</h3><p>An independent local Loader arrives in window, lifts the {escape(item['label'].lower())}, and routes it through local partners.</p></div>
+      <div class="how-step"><span class="step-num"><em>03</em></span><h3>Pay upfront online</h3><p>Card charged at booking. Your price is guaranteed for the scope you book, if items or access change on site, adjustments follow our Terms.</p></div>
+      <div class="how-step"><span class="step-num"><em>04</em></span><h3>{escape(cname)} Loader arrives</h3><p>A background-checked local Loader arrives in window, lifts the {escape(item['label'].lower())}, and routes it through local partners.</p></div>
     </div>
 {photo_trust}
   </div>
@@ -736,7 +736,7 @@ ITEM_NAV = ""
 
 def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb,
                hero_media="", h1_icon=""):
-    """Generic index page: groups = [(heading, [(label, href), ...]), ...]"""
+    """Generic index page: groups = [(heading, [(label, href)...])...]"""
     d = cfg["domain"]
     nav = load_partial("nav.html").replace("{{CITY_SLUG}}", "")
     footer = (load_partial("footer.html")
@@ -818,7 +818,7 @@ def build_redirects(cities, items, out, cfg, legacy_path):
     """
     valid = {(c["state_code"], c["city_slug"]) for c in cities}
     lines = ["# " + "=" * 69,
-             f"# {cfg['brand']} \u2014 Netlify _redirects",
+             f"# {cfg['brand']}, Netlify _redirects",
              "# Generated by scripts/build.py",
              "# " + "=" * 69,
              "",
@@ -848,7 +848,7 @@ def build_redirects(cities, items, out, cfg, legacy_path):
     }
     lines += ["# " + "-" * 69,
               "# LEGACY -> NEW ARCHITECTURE  (this is what was missing)",
-              "# Netlify :placeholder rules \u2014 12 rules replace ~51,000 enumerated ones.",
+              "# Netlify :placeholder rules, 12 rules replace ~51,000 enumerated ones.",
               "# " + "-" * 69]
     n_legacy = 0
     for old, new in legacy_map.items():
@@ -923,7 +923,7 @@ def build_redirects(cities, items, out, cfg, legacy_path):
         lines.append("")
 
     lines += ["# " + "-" * 69,
-              "# BLOG \u2014 WORDPRESS PROXY",
+              "# BLOG, WORDPRESS PROXY",
               "# The blog still lives (and publishes) on WordPress: 72 posts and",
               "# growing. Top posts are restored statically above; everything else",
               "# under /blog/ should proxy to the WordPress origin so no post ever",
@@ -938,7 +938,7 @@ def build_redirects(cities, items, out, cfg, legacy_path):
               "# /wp-content/*        https://WP_ORIGIN/wp-content/:splat        200",
               "",
               "# " + "-" * 69,
-              "# BLOG \u2014 DO NOT REDIRECT. These are the highest-traffic URLs on the",
+              "# BLOG, DO NOT REDIRECT. These are the highest-traffic URLs on the",
               "# site. They must be rebuilt at their existing paths.",
               "# " + "-" * 69,
               "# /blog/home-cleaning/how-much-is-a-used-couch-worth/   (1,641 clicks)",
@@ -1158,7 +1158,7 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
             f"{states[st]} Couch Removal | {len(cs)} Cities | {cfg['brand']}",
             f"{states[st]} couch removal",
             f"Upfront online pricing and same-day pickup across {len(cs)} {states[st]} cities. "
-            f"Independent local Loaders, donation routing first.",
+            f"Background-checked local Loaders, donation routing first.",
             groups, cfg, f"/{st}/",
             [("Home", "/"), ("Locations", "/locations/"), (states[st], f"/{st}/")])
         write(os.path.join(out, st, "index.html"), html)
@@ -1273,7 +1273,7 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
     faqs = [
         ("How much does couch removal cost?",
          "Standard couches start at $90, loveseats at $75, sleepers at $110, and sectionals at $150. "
-         "Enter your ZIP on the pricing page for your exact number \u2014 the price you see at booking "
+         "Enter your ZIP on the pricing page for your exact number, the price you see at booking "
          "is the price you're charged."),
         ("Do I pay before or after the pickup?",
          "At booking. Your card is charged online when you book, and the price is guaranteed for the "
@@ -1288,23 +1288,23 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
          "Yes. Walk-ups, basements, and tight stairwells are part of the job. Standard stair access "
          "noted at booking is included in your quoted price."),
         ("Who actually picks up my couch?",
-         "A background-checked independent local Loader dispatched through the LoadUp platform, which "
+         "A background-checked local Loader dispatched through the LoadUp platform, which "
          "has operated nationwide since 2014. You'll receive confirmation and updates by email and text."),
         ("Should I tip the Loaders?",
          "Tipping is never required or expected. If a crew impresses you, tips are welcome and go "
          "entirely to the Loaders, but nothing about your service depends on it."),
         ("Can I reschedule or cancel?",
-         "Yes \u2014 through the confirmation link in your booking email or by contacting support. "
+         "Yes, through the confirmation link in your booking email or by contacting support. "
          "Timing and any fees are governed by the Terms of Service; the earlier you change, the simpler it is."),
         ("What happens to my couch after pickup?",
          "Donatable couches are offered to local charity partners first. What can't be donated is "
          "routed to recycling where facilities allow, with licensed disposal as the last resort."),
         ("What won't you take?",
          "Hazardous materials and items outside furniture and household goods. If a couch has mold or "
-         "pest issues, disclose it at booking \u2014 it changes handling, not necessarily eligibility."),
+         "pest issues, disclose it at booking, it changes handling, not necessarily eligibility."),
         ("Is my couch eligible for donation?",
          "Clean, intact, odor-free couches with working mechanisms generally qualify. Stains, rips, "
-         "moisture damage, or pet odor usually disqualify \u2014 but booking donation pickup never "
+         "moisture damage, or pet odor usually disqualify, but booking donation pickup never "
          "wastes the trip: ineligible items are recycled or disposed of responsibly instead."),
         ("Do you service my city?",
          "We operate in 4,600+ cities across all 50 states and Washington, D.C. Enter your ZIP in the "
@@ -1339,11 +1339,11 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
 
     loader_body = '''<section class="hero"><div class="wrap">
     <h1>Become a Loader</h1>
-    <p class="hero-sub">Loaders are the independent local pros who make every pickup on this site happen &mdash; background-checked, equipped with their own truck, and paid per completed job through the LoadUp platform.</p>
+    <p class="hero-sub">Loaders are the local pros who make every pickup on this site happen, background-checked, equipped with their own truck, and paid per completed job through the LoadUp platform.</p>
   </div></section>
 <section class="section"><div class="wrap" style="max-width:800px">
     <h2>How it works</h2>
-    <p>LoadUp Technologies, our parent platform, dispatches furniture pickups to independent Loaders in 4,600+ cities. You claim jobs that fit your schedule and route, handle the pickup and the responsible disposal or donation drop-off, and get paid per job &mdash; no shifts, no boss, no storefront.</p>
+    <p>LoadUp Technologies, our parent platform, dispatches furniture pickups to local Loaders in 4,600+ cities. You claim jobs that fit your schedule and route, handle the pickup and the responsible disposal or donation drop-off, and get paid per job, no shifts, no boss, no storefront.</p>
     <h2>What you need</h2>
     <p>A pickup truck, trailer, or cargo van; the ability to pass a background check; a smartphone for the Loader app; and the work ethic to treat someone's home with care. Two-person crews handle most furniture; solo Loaders take the jobs sized for one.</p>
     <h2>Apply</h2>
@@ -1351,7 +1351,7 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
   </div></section>'''
     write(os.path.join(out, "become-a-loader", "index.html"),
           make_blog.shell(cfg, load_partial, f"Become a Loader | Drive & Earn with {cfg['brand']}",
-                          "Join the LoadUp platform as an independent Loader: claim furniture pickups in your area, set your own schedule, get paid per completed job.",
+                          "Join the LoadUp platform as an local Loader: claim furniture pickups in your area, set your own schedule, get paid per completed job.",
                           "/become-a-loader/", loader_body,
                           '<a href="/">Home</a><span class="sep">/</span><span class="current">Become a Loader</span>'))
     urls.append(("/become-a-loader/", "0.4"))
@@ -1405,7 +1405,7 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
 > Online couch and furniture removal booking across all 50 U.S. states and
 > Washington, D.C. Operated by LoadUp Technologies, LLC. Upfront ZIP-based
 > pricing (couch removal from $90), same-day and next-day pickup by
-> background-checked independent Loaders. Donation routing first. Rated
+> background-checked local Loaders. Donation routing first. Rated
 > 4.8/5 across 340,000+ verified platform reviews.
 
 ## Key pages

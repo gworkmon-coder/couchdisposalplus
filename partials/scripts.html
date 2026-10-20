@@ -1,5 +1,5 @@
 <script>
-  // FAQ accordion — only interactive piece remaining on the marketing page.
+  // FAQ accordion, only interactive piece remaining on the marketing page.
   // The booking flow is handled by the Workmon embed (or by following the
   // CTA link in the embed-fallback block).
   document.querySelectorAll('.faq-q').forEach(btn => {
@@ -19,7 +19,7 @@
 <script>
   // Live price hydration from the booking engine.
   // Inert until CDP_PRICING_URL is set (one line, site-wide, when the endpoint
-  // exists). Expected response: {"couch": 95, "sectional": 160, ...} for the
+  // exists). Expected response: {"couch": 95, "sectional": 160...} for the
   // requested state+city. Static build-time prices remain the fallback and
   // the SEO-visible truth.
   (function () {
