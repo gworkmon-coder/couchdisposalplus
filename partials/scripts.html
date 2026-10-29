@@ -41,17 +41,15 @@
 </script>
 
 
-<!-- Workmon wb1 chat booking widget (offscreen dock; CTAs forward to it) -->
-<div style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden">
-  <div data-workmon-wb1 data-tenant="loadup" data-brand="cdp" data-button="Book a pickup"></div>
-</div>
+<!-- Workmon launcher: renders its own button; modal pops and sizes itself -->
+<div data-workmon-launcher data-tenant="loadup" data-brand="cdp" data-button="Book online now"></div>
 <script>
 /* Workmon wb1 forwarder: routes every [data-workmon-open] CTA to the wb1
    widget's own rendered trigger. Retries ~2.5s while the widget mounts,
    then falls back to the booking page so no click ever dead-ends. */
 (function(){
   function findTrigger(){
-    var host=document.querySelector('[data-workmon-wb1]');
+    var host=document.querySelector('[data-workmon-launcher]');
     if(!host)return null;
     var b=host.querySelector('button,[role="button"],a');
     if(!b&&host.shadowRoot)b=host.shadowRoot.querySelector('button,[role="button"],a');

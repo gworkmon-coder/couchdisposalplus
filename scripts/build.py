@@ -1020,14 +1020,12 @@ def main():
     # carry over hand-built core pages from the existing deploy
     CORE = ["about", "book-online", "contact", "donation-pickup", "how-it-works",
             "pricing", "privacy", "reviews", "terms", "track-order"]
-    WM_WB1 = ('<!-- Workmon wb1 chat booking widget (offscreen dock) -->\n'
-        '<div style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden">\n'
-        '  <div data-workmon-wb1 data-tenant="loadup" data-brand="cdp" data-button="Book a pickup"></div>\n'
-        '</div>\n')
+    WM_LAUNCHER = ('<!-- Workmon launcher: self-sizing modal -->\n'
+        '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp" data-button="Book online now"></div>\n')
     WM_FORWARDER = r"""<script>
 /* Workmon wb1 forwarder */
 (function(){
-function findTrigger(){var host=document.querySelector('[data-workmon-wb1]');if(!host)return null;var b=host.querySelector('button,[role="button"],a');if(!b&&host.shadowRoot)b=host.shadowRoot.querySelector('button,[role="button"],a');if(!b){var w=host.firstElementChild;if(w&&w.shadowRoot)b=w.shadowRoot.querySelector('button,[role="button"],a');}return b;}
+function findTrigger(){var host=document.querySelector('[data-workmon-launcher]');if(!host)return null;var b=host.querySelector('button,[role="button"],a');if(!b&&host.shadowRoot)b=host.shadowRoot.querySelector('button,[role="button"],a');if(!b){var w=host.firstElementChild;if(w&&w.shadowRoot)b=w.shadowRoot.querySelector('button,[role="button"],a');}return b;}
 document.addEventListener('click',function(e){var t=e.target.closest('[data-workmon-open]');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var b=findTrigger();if(b)return b.click();var tries=0,iv=setInterval(function(){var bb=findTrigger();tries++;if(bb){clearInterval(iv);bb.click();}else if(tries>16){clearInterval(iv);window.location.href='/book-online/';}},150);},true);})();
 </script>
 """
@@ -1050,8 +1048,8 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
         # markup it would inject -- never a bare attribute-name substring,
         # which CSS selectors elsewhere on the page can contain.
         pieces = []
-        if "<div data-workmon-wb1" not in html:
-            pieces.append(WM_WB1)
+        if "<div data-workmon-launcher" not in html:
+            pieces.append(WM_LAUNCHER)
         if "Workmon wb1 forwarder" not in html:
             pieces.append(WM_FORWARDER)
         if "workmon.ai/embed.js" not in html:
