@@ -587,7 +587,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
       <h1>{escape(cname)} {escape(item['h1_noun'])}, <em>handled fast</em>.</h1>
       <p class="hero-sub">{hero_sub}</p>
 
-      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
+      <button data-cdp-open class="btn-price">Get Instant Price &rarr;</button>
 
       <div class="local-stats">
         <div class="stat"><span class="stat-num"><em>24h</em></span><span class="stat-label">Avg. Pickup Time</span></div>
@@ -658,7 +658,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
         <p class="desc">{item['desc_card']}</p>
         <span class="price" data-cdp-price data-state="{st}" data-city="{slug}" data-item="{item_key}">$<em>{price}</em></span>
         <span class="price-note">{escape(cname)} starting price</span>
-        <button data-workmon-open class="book">Get Instant Price &rarr;</button>
+        <button data-cdp-open class="book">Get Instant Price &rarr;</button>
       </article>
 
 {sib_html}
@@ -719,7 +719,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
   <div class="wrap cta-inner">
     <h2>{escape(cname)}. {escape(item['label'])} <em>out</em>. Done.</h2>
     <p>Pick your item, confirm your ZIP, and a Loader handles the rest.</p>
-    <button data-workmon-open class="cta-btn">Get My {escape(cname)} Price &rarr;</button>
+    <button data-cdp-open class="cta-btn">Get My {escape(cname)} Price &rarr;</button>
     <span class="cta-or">or call <a href="tel:{cfg['phone_href']}" style="color:var(--black);font-weight:700;text-decoration:underline;">{cfg['phone_display']}</a></span>
   </div>
 </section>
@@ -788,7 +788,7 @@ def render_hub(title, h1, intro, groups, cfg, canonical, breadcrumb,
     <div>
       <h1>{h1_icon}{escape(h1)}</h1>
       <p class="hero-sub">{escape(intro)}</p>
-      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
+      <button data-cdp-open class="btn-price">Get Instant Price &rarr;</button>
     </div>
 {hero_media}
   </div>
@@ -1316,7 +1316,7 @@ def main():
     </div>
     <div class="post-cta" style="margin-top:40px"><h2>Ready to book?</h2>
       <p>Upfront price by ZIP. Same-day pickup in most cities before 2PM EST.</p>
-      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button></div>
+      <button data-cdp-open class="btn-price">Get Instant Price &rarr;</button></div>
   </div></section>'''
     write(os.path.join(out, "faq", "index.html"),
           make_blog.shell(cfg, load_partial, f"FAQ | Couch Removal Questions Answered | {cfg['brand']}",

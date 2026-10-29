@@ -76,7 +76,7 @@
     '<li><a href="/how-it-works/">How it works</a></li>' +
     "</ul>" +
     '<div class="m-drawer-ctas">' +
-    '<button class="m-btn lime" data-workmon-open>Get Instant Price \u2192</button>' +
+    '<button class="m-btn lime" data-cdp-open>Get Instant Price \u2192</button>' +
     '<div class="m-row">' +
     '<a class="m-btn" href="tel:' + PHONE + '">' + ICONS.phone + " " + PHONE_FMT + "</a>" +
     '<a class="m-btn" href="sms:' + SMS + '">' + ICONS.msg + " Text us</a>" +
@@ -94,11 +94,30 @@
   burger.addEventListener("click", function () { setOpen(true); });
   drawer.addEventListener("click", function (e) {
     if (e.target.closest("[data-mclose]") || e.target.closest("a") ||
-        e.target.closest("[data-workmon-open]")) setOpen(false);
+        e.target.closest("[data-cdp-open]")) setOpen(false);
   });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && drawer.classList.contains("open")) setOpen(false);
   });
 
+})();
+</script>
+
+<script>
+/* data-cdp-open handler: opens the Workmon centered booking flow (gate in
+   the popup). Our own attribute, so the launcher's drawer wiring never
+   intercepts it. Falls back to the booking page if the embed never loads. */
+(function () {
+  document.addEventListener('click', function (e) {
+    var b = e.target && e.target.closest && e.target.closest('[data-cdp-open]');
+    if (!b) return;
+    e.preventDefault();
+    var tries = 0;
+    (function go() {
+      if (window.WorkmonBook && window.WorkmonBook.open) return window.WorkmonBook.open('booking');
+      if (++tries > 20) return window.location.href = '/book-online/';
+      setTimeout(go, 150);
+    })();
+  });
 })();
 </script>

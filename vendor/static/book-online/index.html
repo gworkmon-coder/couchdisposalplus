@@ -266,7 +266,7 @@
   // This is a shim; the underlying stacking is Workmon's to fix.
   (function () {
     document.addEventListener('click', function (e) {
-      var btn = e.target && e.target.closest && e.target.closest('[data-workmon-open]');
+      var btn = e.target && e.target.closest && e.target.closest('[data-cdp-open]');
       if (!btn) return;
       if (document.querySelector('[data-workmon-modal]')) {
         e.preventDefault();

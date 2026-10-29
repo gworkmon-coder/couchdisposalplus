@@ -368,7 +368,7 @@
     </ul>
     <div class="nav-actions">
       <a href="/track-order/" class="btn-ghost">Track Order</a>
-      <button data-workmon-open class="btn-cta">Book</button>
+      <button data-cdp-open class="btn-cta">Book</button>
     </div>
   </div>
 </nav>
@@ -380,7 +380,7 @@
       <h1>Old couch <em>out</em>.<br>Done in a day.</h1>
       <p class="hero-sub">The easiest way to get rid of an old couch. <strong>Upfront pricing online, same-day pickup, and donation routing first</strong>, handled by background-checked local Loaders across the country.</p>
 
-      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
+      <button data-cdp-open class="btn-price">Get Instant Price &rarr;</button>
 
       <div class="hero-stats">
         <div class="stat">
@@ -442,7 +442,7 @@
         <p class="desc">Three-seater sofas and traditional couches up to 84″.</p>
         <span class="price">$<em>90</em></span>
         <span class="price-note">Starting price · all states</span>
-        <button data-workmon-open class="book">Get Instant Price &rarr;</button>
+        <button data-cdp-open class="book">Get Instant Price &rarr;</button>
       </article>
 
       <article class="item-card">
@@ -451,7 +451,7 @@
         <p class="desc">L-shape, U-shape, and modular sectionals. Disassembly included.</p>
         <span class="price">$<em>150</em></span>
         <span class="price-note">Starting price · per piece</span>
-        <button data-workmon-open class="book">Get Instant Price &rarr;</button>
+        <button data-cdp-open class="book">Get Instant Price &rarr;</button>
       </article>
 
       <article class="item-card">
@@ -460,7 +460,7 @@
         <p class="desc">Pull-out beds, convertibles, steel-frame fold-outs.</p>
         <span class="price">$<em>110</em></span>
         <span class="price-note">Heavy mechanism included</span>
-        <button data-workmon-open class="book">Get Instant Price &rarr;</button>
+        <button data-cdp-open class="book">Get Instant Price &rarr;</button>
       </article>
 
       <article class="item-card">
@@ -469,7 +469,7 @@
         <p class="desc">Manual, power, lift chairs, and massage chairs.</p>
         <span class="price">$<em>90</em></span>
         <span class="price-note">Motors &amp; batteries recycled</span>
-        <button data-workmon-open class="book">Get Instant Price &rarr;</button>
+        <button data-cdp-open class="book">Get Instant Price &rarr;</button>
       </article>
     </div>
   </div>
@@ -779,7 +779,7 @@
   // This is a shim; the underlying stacking is Workmon's to fix.
   (function () {
     document.addEventListener('click', function (e) {
-      var btn = e.target && e.target.closest && e.target.closest('[data-workmon-open]');
+      var btn = e.target && e.target.closest && e.target.closest('[data-cdp-open]');
       if (!btn) return;
       if (document.querySelector('[data-workmon-modal]')) {
         e.preventDefault();

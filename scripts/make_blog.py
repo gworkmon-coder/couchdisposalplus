@@ -188,7 +188,7 @@ def build_blog(out, cfg, load_partial, write, photos=None):
     <div class="post-cta">
       <h2>Ready to lose the couch?</h2>
       <p>Upfront price online. Same-day pickup available. Donation routing first.</p>
-      <button data-workmon-open class="btn-price">Get Instant Price &rarr;</button>
+      <button data-cdp-open class="btn-price">Get Instant Price &rarr;</button>
     </div>
   </div>
 </article>'''
