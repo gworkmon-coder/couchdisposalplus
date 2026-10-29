@@ -1022,13 +1022,6 @@ def main():
             "pricing", "privacy", "reviews", "terms", "track-order"]
     WM_LAUNCHER = ('<!-- Workmon launcher: self-sizing modal -->\n'
         '<div data-workmon-launcher data-tenant="loadup" data-brand="cdp" data-button="Book online now"></div>\n')
-    WM_FORWARDER = r"""<script>
-/* Workmon wb1 forwarder */
-(function(){
-function findTrigger(){var host=document.querySelector('[data-workmon-launcher]');if(!host)return null;var b=host.querySelector('button,[role="button"],a');if(!b&&host.shadowRoot)b=host.shadowRoot.querySelector('button,[role="button"],a');if(!b){var w=host.firstElementChild;if(w&&w.shadowRoot)b=w.shadowRoot.querySelector('button,[role="button"],a');}return b;}
-document.addEventListener('click',function(e){var t=e.target.closest('[data-workmon-open]');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var b=findTrigger();if(b)return b.click();var tries=0,iv=setInterval(function(){var bb=findTrigger();tries++;if(bb){clearInterval(iv);bb.click();}else if(tries>16){clearInterval(iv);window.location.href='/book-online/';}},150);},true);})();
-</script>
-"""
     WM_EMBED = '<script type="module" src="https://workmon.ai/embed.js" async></script>\n'
     WM_TEXTUS = ("<!-- Workmon initiate-SMS widget: desktop only -->\n"
         "<script>if(window.matchMedia('(min-width: 901px)').matches){"
@@ -1050,8 +1043,6 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-work
         pieces = []
         if "<div data-workmon-launcher" not in html:
             pieces.append(WM_LAUNCHER)
-        if "Workmon wb1 forwarder" not in html:
-            pieces.append(WM_FORWARDER)
         if "workmon.ai/embed.js" not in html:
             pieces.append(WM_EMBED)
         if "workmon.ai/embed/textus.js" not in html:
