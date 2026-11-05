@@ -26,7 +26,7 @@ Check your building's collection day with DSNY's schedule lookup before planning
 
 The DSNY route fails in three common NYC situations: **the couch can't get downstairs** (no elevator, no help, or a sectional that needs disassembly first), **the timing doesn't work** (move-out is Saturday, trash day is Wednesday), or **the couch is still good**, putting a donatable sofa out in the rain to be collected as trash is the worst outcome for a piece [a charity would have taken](/blog/eco-friendly-living/can-couch-be-donated/).
 
-For those cases: [couch removal in New York City](/ny/new-york-city/couch-removal/) starts at $90 with the carry-out from inside your apartment included, walk-ups and all, same-day in most ZIPs when you [book before 2PM EST](/book-online/), and [donation routing](/ny/new-york-city/donation-pickup/) first for anything in good condition. Full pricing by item is in our [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
+For those cases: [couch removal in New York City](/ny/new-york-city/couch-removal/) starts at $90 with the carry-out from inside your apartment included, walk-ups and all, same-day in most ZIPs when you [book before 2PM local time](/book-online/), and [donation routing](/ny/new-york-city/donation-pickup/) first for anything in good condition. Full pricing by item is in our [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
 
 ## Frequently Asked Questions
 
@@ -44,4 +44,4 @@ Couches generally don't require wrapping, mattresses do (sealed plastic bags, in
 
 ### What's the fastest way to get rid of a couch in NYC?
 
-Booked removal, the couch leaves from inside your apartment on your schedule rather than the city's, with [same-day pickup available](/ny/new-york-city/couch-removal/) in most of the five boroughs before the 2PM EST cutoff.
+Booked removal, the couch leaves from inside your apartment on your schedule rather than the city's, with [same-day pickup available](/ny/new-york-city/couch-removal/) in most of the five boroughs before the 2PM local time cutoff.

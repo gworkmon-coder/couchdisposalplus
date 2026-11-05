@@ -26,7 +26,7 @@ The strategic wrinkle: four pickups a year is a budget. Spending one appointment
 
 **Transfer stations** accept resident drop-offs if you have a truck and would rather not spend an appointment. **Donation** deserves first consideration in a city with year-round moving season, a couch that [passes condition standards](/blog/eco-friendly-living/can-couch-be-donated/) can be picked up by charity programs instead of landfilled. And one Phoenix-specific warning from physics: desert sun destroys upholstery fast, a couch "waiting at the curb for a while" in July comes back unfit for donation in days, not weeks.
 
-**When the appointment math doesn't work**, you're out of annual pickups, the three-day lead time collides with a move, or the couch is up a flight of stairs: [couch removal in Phoenix](/az/phoenix/couch-removal/) starts at $90, carry-out included, [same-day in most ZIPs before 2PM EST](/book-online/), with [donation routing](/az/phoenix/donation-pickup/) first for anything in good shape. Item pricing is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
+**When the appointment math doesn't work**, you're out of annual pickups, the three-day lead time collides with a move, or the couch is up a flight of stairs: [couch removal in Phoenix](/az/phoenix/couch-removal/) starts at $90, carry-out included, [same-day in most ZIPs before 2PM local time](/book-online/), with [donation routing](/az/phoenix/donation-pickup/) first for anything in good shape. Item pricing is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
 
 ## Frequently Asked Questions
 
@@ -44,4 +44,4 @@ Only after you have an appointment, and no more than seven days before it. Early
 
 ### What's the fastest way to remove a couch in Phoenix?
 
-Booked removal beats the three-business-day municipal lead time: [same-day across most of Phoenix](/az/phoenix/couch-removal/) when booked before 2PM EST, with the carry from inside your home included.
+Booked removal beats the three-business-day municipal lead time: [same-day across most of Phoenix](/az/phoenix/couch-removal/) when booked before 2PM local time, with the carry from inside your home included.

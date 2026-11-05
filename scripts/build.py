@@ -115,6 +115,15 @@ def compute_nearby(cities, n):
     # national anchors: largest cities overall, used to pad thin states
     anchors = sorted(cities, key=lambda c: -c["population"])[:40]
 
+    # distance to the nearest major metro (>=200k), used to classify
+    # population-unknown cities as suburban vs light-density
+    metros = [c for c in cities if c["population"] >= 200000]
+    for c in cities:
+        if c.get("geo_source") == "inherited":
+            c["_metro_dist"] = None
+            continue
+        c["_metro_dist"] = min(haversine(c["lat"], c["lng"], m["lat"], m["lng"]) for m in metros)
+
     nearby = {}
     for c in cities:
         pool = [o for o in by_state[c["state_code"]] if o["city_slug"] != c["city_slug"]]
@@ -240,8 +249,13 @@ DENSITY_BANDS = [
 
 
 def density_copy(city):
+    # population unknown (0) must not read as tiny: classify by metro distance
+    pop = city["population"]
+    if pop == 0:
+        d = city.get("_metro_dist")
+        pop = 50000 if (d is None or d <= 35) else 10000
     for floor, _key, text in DENSITY_BANDS:
-        if city["population"] >= floor:
+        if pop >= floor:
             return text.replace("{city}", city["city_name"])
     return ""
 
@@ -383,7 +397,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
         f"{svc} in {cname}, {st.upper()} starts at ${price}. "
         f"{cfg['brand']} prices every pickup online up front, no in-home quote. "
         f"Standard stair access and disassembly are included when noted at booking. Same-day pickup is available "
-        f"when you book before 2PM EST; next-day is standard. Donatable {item['plural']} are "
+        f"when you book before 2PM local time; next-day is standard. Donatable {item['plural']} are "
         f"routed to {sname} charity partners first.")
 
     # ---- schema -----------------------------------------------------------
@@ -524,7 +538,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
     {{ "@type": "HowToStep", "position": 1, "name": "Get an instant {cname} price",
        "text": "Enter your {cname}-area ZIP and select the items going. The guaranteed price displays immediately, no in-home quote.", "url": "{url}#step1" }},
     {{ "@type": "HowToStep", "position": 2, "name": "Pick a pickup window",
-       "text": "Same-day if booked before 2PM EST, next-day by default. Choose a 4-hour window and confirmation is sent immediately.", "url": "{url}#step2" }},
+       "text": "Same-day if booked before 2PM local time, next-day by default. Choose a 4-hour window and confirmation is sent immediately.", "url": "{url}#step2" }},
     {{ "@type": "HowToStep", "position": 3, "name": "Pay upfront online",
        "text": "Your card is charged at booking. The price is guaranteed for the scope you book; on-site changes are priced per our Terms.", "url": "{url}#step3" }},
     {{ "@type": "HowToStep", "position": 4, "name": "A {cname} Loader collects the {item['label'].lower()}",
@@ -590,9 +604,9 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
       <button data-cdp-open class="btn-price">Get Instant Price &rarr;</button>
 
       <div class="local-stats">
-        <div class="stat"><span class="stat-num"><em>24h</em></span><span class="stat-label">Avg. Pickup Time</span></div>
+        <div class="stat"><span class="stat-num"><em>24h</em></span><span class="stat-label">Typical Pickup Window</span></div>
         <div class="stat"><span class="stat-num"><em>${price}</em></span><span class="stat-label">Starting Price</span></div>
-        <div class="stat"><span class="stat-num"><em>{cfg['reviews_display']}</em></span><span class="stat-label">Verified Reviews</span></div>
+        <div class="stat"><span class="stat-num"><em>{cfg['reviews_display']}</em></span><span class="stat-label">Platform Reviews, Nationwide</span></div>
         <div class="stat"><span class="stat-num"><em>&#9733; {cfg['rating']}</em></span><span class="stat-label">Avg. Rating</span></div>
       </div>
     </div>
@@ -676,7 +690,7 @@ def render_city_item(city, item, item_key, items, states, nearby, cfg):
 
     <div class="how-steps">
       <div class="how-step"><span class="step-num"><em>01</em></span><h3>Get instant {escape(cname)} price</h3><p>Enter your {escape(cname)}-area ZIP and pick the items going. Your guaranteed price displays immediately.</p></div>
-      <div class="how-step"><span class="step-num"><em>02</em></span><h3>Pick a pickup window</h3><p>Same-day if booked before 2PM EST, next-day default. Choose a 4-hour window. Confirmation sent immediately.</p></div>
+      <div class="how-step"><span class="step-num"><em>02</em></span><h3>Pick a pickup window</h3><p>Same-day if booked before 2PM local time, next-day default. Choose a 4-hour window. Confirmation sent immediately.</p></div>
       <div class="how-step"><span class="step-num"><em>03</em></span><h3>Pay upfront online</h3><p>Card charged at booking. Your price is guaranteed for the scope you book, if items or access change on site, adjustments follow our Terms.</p></div>
       <div class="how-step"><span class="step-num"><em>04</em></span><h3>{escape(cname)} Loader arrives</h3><p>A background-checked local Loader arrives in window, lifts the {escape(item['label'].lower())}, and routes it through local partners.</p></div>
     </div>
@@ -1202,7 +1216,7 @@ def main():
     </figure>
 '''
         html = render_hub(
-            f"{item['label']} Removal | Nationwide Pickup from ${item['price']} | {cfg['brand']}",
+            f"{item.get('service_name', item['label'] + ' Removal')} | Nationwide Pickup from ${item['price']} | {cfg['brand']}",
             f"{item['label']} removal, nationwide",
             f"{item['label']} removal starting at ${item['price']}. Upfront online pricing, "
             f"same-day and next-day pickup, donation routing first. Also searched as "
@@ -1268,7 +1282,7 @@ def main():
          "At booking. Your card is charged online when you book, and the price is guaranteed for the "
          "scope you describe. If items or access turn out different on site, adjustments follow our Terms."),
         ("How fast can you pick up?",
-         "Same-day pickup is available in most cities when you book before 2PM EST; next-day is the "
+         "Same-day pickup is available in most cities when you book before 2PM local time; next-day is the "
          "standard everywhere we operate."),
         ("Do I need to be home for the pickup?",
          "Not necessarily. Many pickups are completed from garages, porches, or with building access "
@@ -1315,7 +1329,7 @@ def main():
 {faq_items}
     </div>
     <div class="post-cta" style="margin-top:40px"><h2>Ready to book?</h2>
-      <p>Upfront price by ZIP. Same-day pickup in most cities before 2PM EST.</p>
+      <p>Upfront price by ZIP. Same-day pickup in most cities before 2PM local time.</p>
       <button data-cdp-open class="btn-price">Get Instant Price &rarr;</button></div>
   </div></section>'''
     write(os.path.join(out, "faq", "index.html"),

@@ -176,10 +176,22 @@ def build(city, state_name, state_cities, nearby):
             t = t.replace("{" + k + "}", v)
         return t
 
-    paras = [fix_articles(f(band(pop, POP_BANDS))), fix_articles(f(rank_band(rank))),
-             fix_articles(f(cluster_band(len(within25))))]
+    if pop > 0:
+        paras = [fix_articles(f(band(pop, POP_BANDS))), fix_articles(f(rank_band(rank))),
+                 fix_articles(f(cluster_band(len(within25))))]
+    else:
+        paras = [fix_articles(f(cluster_band(len(within25))))]
 
-    if anchor["city_slug"] != city["city_slug"] and anchor_d > 1:
+    if city.get("geo_source") == "inherited":
+        paras.append(
+            f"{cname} is served through the {state_name} Loader network, so same-day availability "
+            f"tracks regional demand and booking a day ahead is the surest way to lock a window.")
+    elif anchor["city_slug"] != city["city_slug"] and anchor_d > 75:
+        paras.append(
+            f"{cname} sits in {region}, about {int(round(anchor_d))} miles from {anchor['city_name']}, "
+            f"far enough that pickups run on their own regional routes rather than metro capacity, "
+            f"so booking a day ahead is the surest way to lock a window.")
+    elif anchor["city_slug"] != city["city_slug"] and anchor_d > 1:
         paras.append(
             f"{cname} sits in {region}, about {int(round(anchor_d))} miles from {anchor['city_name']}, "
             f"and draws on the same regional Loader network, so same-day availability here tends "
@@ -224,7 +236,7 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
         (f"How much does {item['h1_noun']} cost in {cname}?",
          item["faq_cost"].replace("{city}", cname).replace("{price}", str(price or item["price"]))),
         (f"How fast can you collect my {label} in {cname}?",
-         f"Same-day pickup is available across {cname} for bookings placed before 2PM EST. Next-day is "
+         f"Same-day pickup is available across {cname} for bookings placed before 2PM local time. Next-day is "
          f"the default. Average booking-to-pickup time in {cname} is about 24 hours."),
         (f"Do I need to prepare the {label} before pickup?",
          item["faq_special"].replace("{city}", cname)),
@@ -250,7 +262,7 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
     if rank <= 3:
         q.append((f"Do you cover all of {cname}, or only certain ZIPs?",
                   f"All of {cname}. As one of the largest markets in {sname}, it carries standing "
-                  f"Loader coverage rather than routed coverage, so every ZIP in the city is bookable."))
+                  f"Loader coverage rather than routed coverage, so most ZIPs in the city are bookable same-day."))
 
     if abs_list:
         names = [" ".join(w.capitalize() for w in a.split("-")) for a in sorted(abs_list)][:5]
@@ -276,9 +288,14 @@ def faq_set(city, item, cname, sname, state_cities, brand, parent, price=None):
 # --------------------------------------------------------------------------
 # item x market interaction copy: what THIS item means in THIS kind of market
 # --------------------------------------------------------------------------
-def market_kind(pop):
+def market_kind(pop, metro_dist=None, geo_known=True):
     if pop >= 200000: return "metro"
     if pop >= 30000: return "suburban"
+    if pop == 0:
+        # population unknown: a known location within 35 miles of a major metro
+        # is a suburb; unknown geography defaults to the neutral suburban copy
+        if not geo_known or (metro_dist is not None and metro_dist <= 35): return "suburban"
+        return "light"
     return "light"
 
 
@@ -308,5 +325,6 @@ ITEM_MARKET = {
 
 
 def item_market_copy(item_key, city):
-    t = ITEM_MARKET.get((item_key, market_kind(city["population"])))
+    t = ITEM_MARKET.get((item_key, market_kind(city["population"], city.get("_metro_dist"),
+                                              city.get("geo_source") != "inherited")))
     return fix_articles(t.replace("{city}", city["city_name"])) if t else ""

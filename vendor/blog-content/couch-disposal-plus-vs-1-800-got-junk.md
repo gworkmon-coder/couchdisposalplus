@@ -44,4 +44,4 @@ Both companies describe donation and recycling efforts. On our platform, donatab
 
 ### What's the fastest option?
 
-Both offer same-day availability depending on market and timing. With us, [book before 2PM EST](/couch-removal/) for same-day in most cities, and since there's no assessment step, booking is the whole process.
+Both offer same-day availability depending on market and timing. With us, [book before 2PM local time](/couch-removal/) for same-day in most cities, and since there's no assessment step, booking is the whole process.

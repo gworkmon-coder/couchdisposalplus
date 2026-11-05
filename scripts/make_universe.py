@@ -16,7 +16,8 @@ participate in linking (flagged geo_source=inherited).
 Output: data/universe.csv
   state_code,city_slug,city_name,population,lat,lng,tier,impressions,absorbs,geo_source,in_production
 """
-import csv, os, re, math, collections
+import csv
+import os, os, re, math, collections
 from geonamescache import GeonamesCache
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -63,6 +64,20 @@ def main():
     centroid = {st: (sum(a for a, _ in v) / len(v), sum(b for _, b in v) / len(v))
                 for st, v in cent.items()}
 
+    # ---- secondary gazetteer: ~30K US places with coordinates (no population)
+    # covers the small cities geonamescache (>15k pop) omits, so they stop
+    # inheriting the state centroid and getting wrong distances/regions
+    gaz = {}
+    gaz_path = os.path.join(ROOT, "vendor", "geo", "us_cities.csv")
+    if os.path.exists(gaz_path):
+        import re as _re, unicodedata as _ud
+        def _slug(x):
+            x = _ud.normalize("NFKD", x).encode("ascii", "ignore").decode()
+            return _re.sub(r"[^a-z0-9]+", "-", x.lower()).strip("-")
+        for r in csv.DictReader(open(gaz_path, encoding="utf-8")):
+            gaz.setdefault((r["STATE_CODE"].lower(), _slug(r["CITY"])),
+                           (float(r["LATITUDE"]), float(r["LONGITUDE"])))
+
     # ---- union -----------------------------------------------------------
     rows = {}
     for key in set(prod) | set(geo):
@@ -74,6 +89,9 @@ def main():
         name = g["name"] if g else p["city_name"]
         if g:
             lat, lng, gsrc = g["lat"], g["lng"], "geonames"
+        elif key in gaz:
+            lat, lng = gaz[key]
+            gsrc = "gazetteer"
         else:
             lat, lng = centroid.get(st, (0.0, 0.0))
             gsrc = "inherited"

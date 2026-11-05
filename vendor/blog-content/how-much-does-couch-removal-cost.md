@@ -29,7 +29,7 @@ Exact pricing depends on your ZIP code, enter it on the [pricing page](/pricing/
 
 ## What Moves the Price Up
 
-Across the industry, the same factors drive cost regardless of provider: **size and weight** (sectionals and sleepers cost more because they're genuinely more labor), **access** (undisclosed walk-ups, long carries, freight-elevator logistics), **quantity** (adding items to one pickup is always cheaper per item than separate trips), and **urgency** (same-day service exists, [book before 2PM EST](/couch-removal/), though we price it the same as scheduled pickup).
+Across the industry, the same factors drive cost regardless of provider: **size and weight** (sectionals and sleepers cost more because they're genuinely more labor), **access** (undisclosed walk-ups, long carries, freight-elevator logistics), **quantity** (adding items to one pickup is always cheaper per item than separate trips), and **urgency** (same-day service exists, [book before 2PM local time](/couch-removal/), though we price it the same as scheduled pickup).
 
 ## Every Disposal Option, Honestly Compared
 

@@ -25,7 +25,7 @@ The practical catch: a couch that misses April's pickup waits until June. That's
 
 Houston runs **six Neighborhood Depository & Recycling Centers** that accept furniture any month, up to four visits per month per household, with a **limit of two large items like couches per visit**, proof of Houston residency required (utility bill or lease), vehicles two tons or under. If you have a truck and a free hour, this beats waiting for an even month.
 
-**When neither fits**, odd month, no truck, or the couch is upstairs: [couch removal in Houston](/tx/houston/couch-removal/) starts at $90 any month of the year, carry-out included, [same-day in most ZIPs before 2PM EST](/book-online/). And a couch in good shape should skip the landfill math entirely, [donation pickup](/tx/houston/donation-pickup/) routes it to charity partners if it [passes condition standards](/blog/eco-friendly-living/can-couch-be-donated/). Pricing by item is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
+**When neither fits**, odd month, no truck, or the couch is upstairs: [couch removal in Houston](/tx/houston/couch-removal/) starts at $90 any month of the year, carry-out included, [same-day in most ZIPs before 2PM local time](/book-online/). And a couch in good shape should skip the landfill math entirely, [donation pickup](/tx/houston/donation-pickup/) routes it to charity partners if it [passes condition standards](/blog/eco-friendly-living/can-couch-be-donated/). Pricing by item is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
 
 ## Frequently Asked Questions
 
@@ -43,4 +43,4 @@ Yes, the six Neighborhood Depositories accept furniture year-round from Houston 
 
 ### What if I can't wait for a Junk Waste month?
 
-Booked removal runs every month: [same-day across most of Houston](/tx/houston/couch-removal/) before the 2PM EST cutoff, with the carry from inside your home included, no odd/even calendar involved.
+Booked removal runs every month: [same-day across most of Houston](/tx/houston/couch-removal/) before the 2PM local time cutoff, with the carry from inside your home included, no odd/even calendar involved.

@@ -24,7 +24,7 @@ Los Angeles has one of the most generous municipal furniture programs in the cou
 
 Three LA-specific gaps: **the carry is yours**, LASAN collects from the curb, and a sectional down three flights of a Koreatown walk-up is not their department; **the schedule is theirs**, the pickup lands on your next collection day, not the day your lease ends; and **a good couch deserves better**, LASAN's own guidance says it plainly: if someone could still use it, donate it first. [Here's what charities accept](/blog/eco-friendly-living/can-couch-be-donated/).
 
-When those gaps matter: [couch removal in Los Angeles](/ca/los-angeles/couch-removal/) starts at $90 with the inside carry included, [same-day in most ZIPs before 2PM EST](/book-online/), and [donation pickup](/ca/los-angeles/donation-pickup/) routes good furniture to local charity partners without you renting a truck on the 405. Item-by-item pricing is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
+When those gaps matter: [couch removal in Los Angeles](/ca/los-angeles/couch-removal/) starts at $90 with the inside carry included, [same-day in most ZIPs before 2PM local time](/book-online/), and [donation pickup](/ca/los-angeles/donation-pickup/) routes good furniture to local charity partners without you renting a truck on the 405. Item-by-item pricing is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
 
 ## Frequently Asked Questions
 
@@ -42,4 +42,4 @@ Yes. Multi-family buildings of five or more units are covered through scheduled 
 
 ### What's the fastest couch removal option in LA?
 
-Booked removal on your own timeline, [same-day across most of LA](/ca/los-angeles/couch-removal/) when you book before 2PM EST, carried out from inside your home rather than waiting curbside for collection day.
+Booked removal on your own timeline, [same-day across most of LA](/ca/los-angeles/couch-removal/) when you book before 2PM local time, carried out from inside your home rather than waiting curbside for collection day.

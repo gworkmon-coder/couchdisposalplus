@@ -27,7 +27,7 @@ Your options are your building's private hauler (ask management what bulk servic
 
 Chicago has one of the country's best furniture-donation ecosystems, the Chicago Furniture Bank furnishes homes for families exiting homelessness and accepts couches that [pass condition standards](/blog/eco-friendly-living/can-couch-be-donated/), alongside Habitat ReStore and the usual national programs. A good couch in this city has somewhere meaningful to go.
 
-**When the city route doesn't fit**, wrong building type, two-week timing you don't have, or a third-floor walk-up carry: [couch removal in Chicago](/il/chicago/couch-removal/) starts at $90 with the carry-out included, [same-day in most ZIPs before 2PM EST](/book-online/), with [donation routing first](/il/chicago/donation-pickup/). Full item pricing is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
+**When the city route doesn't fit**, wrong building type, two-week timing you don't have, or a third-floor walk-up carry: [couch removal in Chicago](/il/chicago/couch-removal/) starts at $90 with the carry-out included, [same-day in most ZIPs before 2PM local time](/book-online/), with [donation routing first](/il/chicago/donation-pickup/). Full item pricing is in the [cost guide](/blog/junk-removal/how-much-does-couch-removal-cost/).
 
 ## Frequently Asked Questions
 
@@ -45,4 +45,4 @@ Only as a properly set-out bulk item on your collection day under the rules abov
 
 ### What's the fastest way to get a couch out of a Chicago apartment?
 
-Booked removal, it's the option that doesn't care which building type you're in. [Same-day across most of Chicago](/il/chicago/couch-removal/) when booked before 2PM EST, carried from inside, stairs included when noted at booking.
+Booked removal, it's the option that doesn't care which building type you're in. [Same-day across most of Chicago](/il/chicago/couch-removal/) when booked before 2PM local time, carried from inside, stairs included when noted at booking.
