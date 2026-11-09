@@ -845,41 +845,88 @@ def build_redirects(cities, items, out, cfg, legacy_path):
     def rule(src, dst, code="301"):
         return f"{src:<62}  {dst:<54}  {code}"
 
-    # ---- 1. legacy service/state/city -> new state/city/item -------------
-    legacy_map = {
+    # ---- 1. legacy service/state/city -> wherever a page actually exists ----
+    # Three classes of legacy URL, each routed so no redirect ever lands on a
+    # 404 (GSC showed 191K legacy URLs chaining into missing city pages):
+    #   a) couch-family services, city in our universe  -> that city's page
+    #   b) couch-family services, city unknown          -> the state hub
+    #   c) non-couch services (mattress, appliance...)   -> the LoadUp brand
+    #      that actually serves them
+    couch_family = {
         "couch-disposal": "couch-removal",
         "couch-donation-pickup": "donation-pickup",
-        "mattress-disposal": None,        # no new page yet -> city couch page
-        "furniture-disposal": None,
-        "appliance-disposal": None,
-        "paint-disposal": None,
-        "bedding-linen-disposal": None,
-        "hospital-bed-disposal": None,
-        "senior-downsizing": None,
-        "area-rug-disposal": None,
-        "treadmill-disposal": None,
+        "sofa-disposal": "couch-removal",
+        "sofa-removal": "couch-removal",
+        "sectional-disposal": "sectional-removal",
+        "sleeper-sofa-disposal": "sleeper-sofa-removal",
+        "loveseat-disposal": "loveseat-removal",
         "recliner-disposal": "recliner-removal",
+        "futon-disposal": "futon-removal",
     }
+    sibling = {
+        "https://mattressdisposalplus.com/": [
+            "mattress-disposal", "box-spring-disposal", "bedding-linen-disposal",
+            "hospital-bed-disposal"],
+        "https://furnituredisposalplus.com/": [
+            "furniture-disposal", "bed-frame-disposal", "dresser-disposal",
+            "tv-stand-disposal", "bedroom-set-disposal", "desk-disposal",
+            "table-disposal", "bookshelf-disposal", "ottoman-disposal",
+            "storage-bench-disposal", "nightstand-disposal", "crib-disposal",
+            "area-rug-disposal"],
+        "https://goloadup.com/": [
+            "appliance-disposal", "cardboard-disposal", "paint-disposal",
+            "grill-disposal", "treadmill-disposal", "college-move-out-disposal",
+            "dorm-room-cleanout", "senior-downsizing", "senior-living-cleanouts",
+            "short-term-rental-cleanouts", "guest-room-cleanout"],
+    }
+    item_slugs = {v["slug"] for v in items.values()}
+    by_tier = {}
+    for c in cities:
+        by_tier.setdefault(int(c.get("tier", 3)), []).append(c)
+
     lines += ["# " + "-" * 69,
-              "# LEGACY -> NEW ARCHITECTURE  (this is what was missing)",
-              "# Netlify :placeholder rules, 12 rules replace ~51,000 enumerated ones.",
+              "# LEGACY COUCH-FAMILY, EXPLICIT (city page exists)",
               "# " + "-" * 69]
     n_legacy = 0
-    for old, new in legacy_map.items():
-        target_item = new if new else "couch-removal"
-        if target_item not in {v["slug"] for v in items.values()}:
-            target_item = "couch-removal"
-        lines.append(rule(f"/{old}/:state/:city/", f"/:state/:city/{target_item}/"))
+    # the two high-volume families get explicit rules for tiers 1-2; the
+    # smaller item families for tier 1 only; everything else falls through
+    for old, new in couch_family.items():
+        if new not in item_slugs:
+            continue
+        tiers = (1, 2) if old in ("couch-disposal", "couch-donation-pickup") else (1,)
+        for t in tiers:
+            for c in by_tier.get(t, []):
+                lines.append(rule(f"/{old}/{c['state_code']}/{c['city_slug']}/",
+                                  f"/{c['state_code']}/{c['city_slug']}/{new}/"))
+                n_legacy += 1
+    lines.append("")
+    lines += ["# " + "-" * 69,
+              "# LEGACY COUCH-FAMILY, FALLBACK (unknown city -> state hub)",
+              "# " + "-" * 69]
+    for old in couch_family:
+        lines.append(rule(f"/{old}/:state/:city/", "/:state/"))
         n_legacy += 1
+    lines.append("")
+    lines += ["# " + "-" * 69,
+              "# LEGACY NON-COUCH SERVICES -> LOADUP BRAND THAT SERVES THEM",
+              "# " + "-" * 69]
+    for host, svcs in sibling.items():
+        for svc in svcs:
+            lines.append(rule(f"/{svc}/*", host))
+            n_legacy += 1
     lines.append("")
 
     # ---- 1b. legacy service hubs -> new item hubs ------------------------
     lines += ["", "# legacy service hubs"]
     built = {v["slug"] for v in items.values()}
     for old, new in [("couch-disposal", "couch-removal"),
-                     ("mattress-disposal", "couch-removal"),
-                     ("furniture-disposal", "couch-removal"),
+                     ("sofa-disposal", "couch-removal"),
+                     ("sofa-removal", "couch-removal"),
                      ("recliner-disposal", "recliner-removal"),
+                     ("sectional-disposal", "sectional-removal"),
+                     ("sleeper-sofa-disposal", "sleeper-sofa-removal"),
+                     ("loveseat-disposal", "loveseat-removal"),
+                     ("futon-disposal", "futon-removal"),
                      ("couch-donation-pickup", "donation-pickup")]:
         lines.append(rule(f"/{old}/", f"/{new}/" if new in built else "/couch-removal/"))
     lines.append("")
@@ -977,11 +1024,20 @@ def build_redirects(cities, items, out, cfg, legacy_path):
               "# " + "-" * 69,
               "# /blog/home-cleaning/how-much-is-a-used-couch-worth/   (1,641 clicks)",
               "# /blog/home-cleaning/how-to-remove-allergens-from-couch/ (396 clicks)",
-              "",
-              "# Catch-all 404",
-              "/*    /404.html    404",
               ""]
 
+    lines += ["# " + "-" * 69,
+              "# LAST RESORT: unknown legacy paths land on a real page, never 404",
+              "# (non-forced rules: any path that exists as a file is served as-is)",
+              "# " + "-" * 69,
+              rule("/donation-pickup/couch/*", "/donation-pickup/"),
+              rule("/blog/*", "/blog/"),
+              rule("/:a/:b/:c/", "/:a/"),
+              rule("/:a/:b/", "/:a/"),
+              "",
+              "# Catch-all 404 (must stay last)",
+              "/*    /404.html    404",
+              ""]
     write(os.path.join(out, "_redirects"), "\n".join(lines))
     return n_legacy, n_flat, n_don, n_art
 
