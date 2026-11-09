@@ -936,6 +936,26 @@ def build_redirects(cities, items, out, cfg, legacy_path):
             n_art += 1
         lines.append("")
 
+    # ---- 4b. blog category safety net --------------------------------------
+    # Recovered posts were rebuilt at a best-guess category. Any other
+    # category path (or the category-less /blog/<slug>/) 301s to the canonical,
+    # so a legacy URL with a different category never 404s.
+    bi_path = os.path.join(DATA, "blog_index.json")
+    if os.path.exists(bi_path):
+        cats = ["home-cleaning", "junk-removal", "eco-friendly-living"]
+        lines += ["# " + "-" * 69,
+                  "# BLOG CATEGORY SAFETY NET",
+                  "# " + "-" * 69]
+        for post in json.load(open(bi_path))["posts"]:
+            canon = post["path"]
+            slug = canon.rstrip("/").split("/")[-1]
+            alts = [f"/blog/{c}/{slug}/" for c in cats] + [f"/blog/{slug}/", f"/{slug}/"]
+            for a in alts:
+                if a != canon:
+                    lines.append(rule(a, canon))
+                    n_art += 1
+        lines.append("")
+
     lines += ["# " + "-" * 69,
               "# BLOG, WORDPRESS PROXY",
               "# The blog still lives (and publishes) on WordPress: 72 posts and",
